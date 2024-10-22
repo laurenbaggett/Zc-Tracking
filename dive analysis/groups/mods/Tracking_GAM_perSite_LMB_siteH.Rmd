@@ -1,0 +1,274 @@
+---
+title: "Tracking_GAM_perSite_LMB_siteH"
+author: "Lauren M Baggett"
+date: "2024-05-10"
+output: html_document
+---
+
+```{r settings setup}
+# load relevent packages
+library(mgcv)
+library(splus2R)
+library(car)
+library(FSA)
+
+# read in data
+df = read.csv("F:/Tracking/groups/bigmodel/SOCAL_total_binned_groups.csv")
+
+# subset by site
+h = df[which(df$site=="H"),]
+```
+
+Now, make a model per site!
+
+Site H:
+```{r site H autocorrelation}
+
+# make 0s Nas
+h[which(h$groupSize==0),4] = NA
+
+# check autocorrelation factor
+h$groupSize = as.numeric(h$groupSize)
+# make a histogram to show the distribution
+hist(h$groupSize)
+
+glmod1 = glm(h$groupSize~h$dayNight+h$jd,family=poisson)
+summary(glmod1)
+# check acf on the residuals
+all_acf = acf(residuals(glmod1),300)
+
+sig = qnorm((1+0.95)/2)/sqrt(sum(!is.na(residuals(glmod1))))
+sig
+idx = which(all_acf$acf < sig)[1]
+all_acf$lag[idx]
+
+```
+
+For site H, lag is 12. 11*25 = 300 minutes. Rebin and then continute on.
+
+```{r rebinned, echo=TRUE}
+# rebin to match the earlier lag value
+
+df = read.csv("F:/Tracking/groups/siteHmod/SOCAL_H_binned_300min_groups.csv")
+
+# replace zeros with Nas just to give it a go
+zeros = which(df$groupSize==0)
+df$groupSize[zeros] = NA
+
+dfMod = df[-which(is.na(df$groupSize)),]
+dfMod$jd = as.numeric(dfMod$jd)
+dfMod$dayNight = as.factor(dfMod$dayNight)
+dfMod$presBins = as.numeric(dfMod$presBins)
+
+# check to see if anything is collinear
+lm1 = lm(groupSize~jd+presBins,data=dfMod)
+car::vif(lm1)
+#       jd presBins 
+# 1.000492 1.000492
+# not collinear, move on
+
+# check whether presence bins should be linear or a smooth
+m1 = gam(groupSize~presBins,data=dfMod,family=tw(),method='REML')
+m2 = gam(groupSize~s(presBins,bs='ts'),data=dfMod,family=tw(),method='REML')
+aic1 = AIC(m1)
+aic2 = AIC(m2)
+# linear has lower AIC
+
+# test to make sure isn't normal
+shapiro.test(dfMod$groupSize)
+# 	Shapiro-Wilk normality test
+# 
+# data:  dfMod$groupSize
+# W = 0.82116, p-value < 2.2e-16
+# data isn't normal
+
+fullModel = gam(groupSize~
+                  + s(dfMod$jd,bs='cc')
+                  + dayNight
+                  + presBins,
+                data=dfMod,family=tw(),method='REML')
+
+selectedCovariates = c("s(jd,bs='cc')", "dayNight","presBins")
+namesCovariates = c("jd","daynight","pres")
+iVarList = 1:length(selectedCovariates)
+NVars = length(selectedCovariates)
+
+# Backward selection:
+# to start, you are running a full model with all non-collinear variables.
+# then, the for loop runs the gams, removing a single variable (going through each potential one)
+# look at the model with the lowest AIC-what variable was removed?
+# branch off from there, run the for loop again, removing another variable (going through each one)
+# keep doing this as long as the AIC value continues to decrease
+# once AIC is increasing, go back to the last set of models run and select the last model ran
+# "Removed"=variable(s) not included in the model
+# "Idx" = variables included in the model
+# ------------------------------------------------------------------------------
+backSelection1 = matrix(0, ncol=3, nrow=NVars+1)
+colnames(backSelection1) = c("Removed","Idx Vars", "AIC")
+# 1st full model
+backSelection1[NVars+1,1] = "None excluded"
+backSelection1[NVars+1,2] = paste(iVarList,collapse=" ")
+backSelection1[NVars+1,3] = AIC(fullModel)
+
+# Remove one variable at a time
+for (x in 1: length (selectedCovariates)){
+  gc()
+  iselected = iVarList[-c(x)]
+  iselected = iselected[order(iselected,decreasing = FALSE)]
+  newformula = as.formula(paste("groupSize ~", paste(selectedCovariates[iselected], collapse = " + ")))
+  m = gam(as.formula (newformula),data=dfMod,family=tw(),method="REML") 
+  backSelection1[x,1] = namesCovariates[x]
+  backSelection1[x,2] = paste(iselected,collapse=" ")
+  backSelection1[x,3] = AIC(m)
+}
+backSelection1[order(backSelection1[,3],decreasing=FALSE),]
+#      Removed         Idx Vars AIC               
+# [1,] "None excluded" "1 2 3"  "2342.21246115672"
+# [2,] "daynight"      "1 3"    "2346.76763386268"
+# [3,] "pres"          "1 2"    "2363.82655175548"
+# [4,] "jd"            "2 3"    "2375.16755655868"
+# lowest AIC was when none were removed, stop here
+
+    
+# now, run it forwards
+# Forward selection
+# to ensure we really are testing out every potential model, work forward!
+# in this case, we are building up the model, each round of the for loop we are adding an additional variable
+# again, keep adding variables until the AIC of the set is increasing instead of decreasing
+# "Included" = variable that was added in this round
+# "Idx" = variable(s) included in the model
+# ------------------------------------------------------------------------------
+fwdSelection1 = matrix(0, ncol=3, nrow=NVars)
+colnames(fwdSelection1) = c("Included","Idx Vars", "AIC")
+
+## 1st round
+# Include one variable at a time
+for (x in 1: length (selectedCovariates)){
+  gc()
+  iselected = c(x)
+  newformula = as.formula(paste("groupSize ~", paste(selectedCovariates[iselected], collapse = " + ")))
+  m = gam(as.formula (newformula),data=dfMod,family=tw(),method="REML") 
+  fwdSelection1[x,1] = namesCovariates[iselected]
+  fwdSelection1[x,2] = paste(iselected,collapse=" ")
+  fwdSelection1[x,3] = AIC(m)
+}
+fwdSelection1[order(fwdSelection1[,3],decreasing=FALSE),]
+#      Included   Idx Vars AIC               
+# [1,] "jd"       "1"      "2368.98082942756"
+# [2,] "pres"     "3"      "2378.67055866688"
+# [3,] "daynight" "2"      "2406.06141861393"
+# lowest AIC is jd, add this into the model and run again
+
+## 2nd round
+# Include one variable at a time with variable(s) included from previous step
+varIncluded = c(1) # variable included from previous step
+fwdSelection2 = matrix(0, ncol=3, nrow=NVars-length(varIncluded))
+colnames(fwdSelection2) = c("Included","Idx Vars", "AIC")
+i = 1
+for (x in 1: length (selectedCovariates)){
+  if (all(x != varIncluded)){
+    gc()
+    iselected = c(varIncluded,x)
+    iselected = iselected[order(iselected,decreasing = FALSE)]
+    newformula = as.formula(paste("groupSize ~", paste(selectedCovariates[iselected], collapse = " + ")))
+    m = gam(as.formula (newformula),data=dfMod,family=tw(),method="REML") 
+    fwdSelection2[i,1] = paste(namesCovariates[iselected],collapse=",")
+    fwdSelection2[i,2] = paste(iselected,collapse=" ")
+    fwdSelection2[i,3] = AIC(m)
+    i = i+1
+  }
+}
+fwdSelection2[order(fwdSelection2[,3],decreasing=FALSE),]
+#      Included      Idx Vars AIC               
+# [1,] "jd,pres"     "1 3"    "2346.76763386268"
+# [2,] "jd,daynight" "1 2"    "2363.82655175548"
+# jd and presence have lowest AIC, add both in and proceed
+
+## 3rd round
+varIncluded = c(1,3) # variable included from previous step
+fwdSelection3 = matrix(0, ncol=3, nrow=NVars-length(varIncluded))
+colnames(fwdSelection3) = c("Included","Idx Vars", "AIC")
+i = 1
+for (x in 1: length (selectedCovariates)){
+  if (all(x != varIncluded)){
+    gc()
+    iselected = c(varIncluded,x)
+    iselected = iselected[order(iselected,decreasing = FALSE)]
+    newformula = as.formula(paste("groupSize ~", paste(selectedCovariates[iselected], collapse = " + ")))
+    m = gam(as.formula (newformula),data=dfMod,family=tw(),method="REML") 
+    fwdSelection3[i,1] = paste(namesCovariates[iselected],collapse=",")
+    fwdSelection3[i,2] = paste(iselected,collapse=" ")
+    fwdSelection3[i,3] = AIC(m)
+    i = i+1
+  }
+}
+fwdSelection3[order(fwdSelection3[,3],decreasing=FALSE),]
+#           Included           Idx Vars                AIC 
+# "jd,daynight,pres"            "1 2 3" "2342.21246115672" 
+# model all variables is best, this aligns with the backwards selection!
+
+# run the model that is the best <3
+# stop here, run the model and see what comes out significant
+# the full model has the lowest AIC
+bestModel = gam(groupSize~
+                  + s(dfMod$jd,bs='cc')
+                  + dayNight
+                  + presBins,
+                data=dfMod,family=tw(),method='REML')
+summary(bestModel)
+# Family: Tweedie(p=1.99) 
+# Link function: log 
+# 
+# Formula:
+# groupSize ~ +s(dfMod$jd, bs = "cc") + dayNight + presBins
+# 
+# Parametric coefficients:
+#              Estimate Std. Error t value Pr(>|t|)    
+# (Intercept) 0.8365432  0.0434733  19.243  < 2e-16 ***
+# dayNight1   0.1211224  0.0480138   2.523   0.0119 *  
+# presBins    0.0048214  0.0009505   5.073 5.16e-07 ***
+# ---
+# Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# Approximate significance of smooth terms:
+#               edf Ref.df     F p-value    
+# s(dfMod$jd) 5.443      8 5.279  <2e-16 ***
+# ---
+# Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# R-sq.(adj) =  0.101   Deviance explained = 11.6%
+# -REML = 1181.9  Scale est. = 0.36229   n = 642
+
+# make the plots
+plot(bestModel, all.terms=TRUE, shade = TRUE) #, residuals = F,
+    # pch = 1, cex = 0.5, shift = coef(bestModel)[1])
+
+```
+
+ 
+ 
+ 
+ 
+```{r kruskal-wallis test on diel pattern, echo=TRUE}
+# # run kruskal-wallis
+# # h0: there is no difference in group size per site
+# # h1: there is a difference in group size per site
+# # this should be significant based on our gam!
+# kruskal.test(groupSize~site, data=dfMod)
+# # 	Kruskal-Wallis rank sum test
+# # 
+# # data:  groupSize by site
+# # Kruskal-Wallis chi-squared = 51.992, df = 3, p-value = 3.007e-11
+# 
+# # now, a post-hoc test
+# dunnTest(groupSize~site, data=dfMod,
+#          method="bh")
+
+# E-H same
+# E-N different
+# H-N different
+# E-W same
+# H-W different
+# N-W different
+
+```
