@@ -1,0 +1,70 @@
+%% plot_tracks_detsvssmooth
+
+% plot encounters with the actual detections
+% and then the smoothed positions
+% lat lon with bathymetry and then also z vs time
+
+% load the whale struct
+load('F:\Tracking\Erics_detector\SOCAL_W_05\cleaned_tracks\track110\track110_loc3D_DOA_whale.mat')
+
+% load bathymetry
+load('F:\Tracking\bathymetry\socal2');
+% load receiver positions
+% W 05
+load('F:\Tracking\Instrument_Orientation\SOCAL_W_05\SOCAL_W_05_WE\REDO\SOCAL_W_05_WE_harp4chParams');
+hydLoc{1} = recLoc;
+clear recLoc
+load('F:\Tracking\Instrument_Orientation\SOCAL_W_05\SOCAL_W_05_WS\REDO\SOCAL_W_05_WS_harp4chParams');
+hydLoc{2} = recLoc;
+h0 = mean([hydLoc{1}; hydLoc{2}]);
+hydLoc{3} = [33.54196  -120.25820 -1510.562];
+% convert hydrophone locations to meters:
+[h1(1), h1(2)] = latlon2xy_wgs84(hydLoc{1}(1), hydLoc{1}(2), h0(1), h0(2));
+h1(3) = abs(h0(3))-abs(hydLoc{1}(3));
+[h2(1), h2(2)] = latlon2xy_wgs84(hydLoc{2}(1), hydLoc{2}(2), h0(1), h0(2));
+h2(3) = abs(h0(3))-abs(hydLoc{2}(3));
+[h3(1), h3(2)] = latlon2xy_wgs84(hydLoc{3}(1), hydLoc{3}(2), h0(1), h0(2));
+% h3(3) = abs(h0(3))-abs(hydLoc{3}(3));
+% params
+paramFile = 'C:\Users\Lauren\Documents\GitHub\Wheres-Whaledo\DOA_small_aperture\params\brushing_pastel';
+global brushing
+loadParams(paramFile)
+
+% convert lat lon to meters, from Eric
+plotAx = [-200, 1200, -1500, 500];
+[x,~] = latlon2xy_wgs84(h0(1).*ones(size(X)), X, h0(1), h0(2));
+[~,y] = latlon2xy_wgs84(Y, h0(2).*ones(size(Y)), h0(1), h0(2));
+Ix = find(x>=plotAx(1)-100 & x<=plotAx(2)+100);
+Iy = find(y>=plotAx(3)-100 & y<=plotAx(4)+100);
+
+% plot the smoothed
+colorVec = {'red','green','cyan','yellow','blue'};
+figure
+contour(x(Ix), y(Iy), Z(Iy,Ix),'color',[0.6 0.6 0.6],'showtext','on')
+hold on
+for wn = 1:length(whale)
+        if isempty(whale{wn}) % if no whale with this num
+            continue
+        else
+            scatter(whale{wn}.wloc(:,2),whale{wn}.wloc(:,1),[],brushing.params.colorMat(wn+2, :))% brushing.params.colorMat(wn+2, :))
+            plot(whale{wn}.wlocSmooth(:,2),whale{wn}.wlocSmooth(:,1),'color',colorVec{wn},'linewidth',3)
+        end
+end
+plot(h1(1),h1(2),'s','markeredgecolor','black','markerfacecolor','black','markersize',6);
+plot(h2(1),h2(2),'s','markeredgecolor','black','markerfacecolor','black','markersize',6);
+% plot(h3(1),h3(2),'o','markeredgecolor','black','markerfacecolor','black','markersize',6);
+
+figure
+hold on
+for wn = 1:length(whale)
+    if isempty(whale{wn})
+        continue
+    else
+        time = datetime(whale{wn}.TDet,'convertfrom','datenum');
+        depth = whale{wn}.wlocSmooth(:,3) + h0(3);
+        scatter(time,whale{wn}.wloc(:,3)+h0(3),[],brushing.params.colorMat(wn+2, :)) % ,'color',brushing.params.colorMat(wn+2, :),'linewidth',3)
+        plot(time,depth,'color',colorVec{wn},'linewidth',3)
+    end
+end
+% ylim([-600 0])
+
