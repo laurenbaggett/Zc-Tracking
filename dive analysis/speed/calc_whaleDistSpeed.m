@@ -10,7 +10,7 @@
 % divide total distance by total time to get the average speed
 
 % load in the data
-df = dir('F:\Tracking\Erics_detector\SOCAL_W_05\new\cleaned_tracks\track*');
+df = dir('F:\Tracking\Erics_detector\SOCAL_E_63\cleaned_tracks\track*');
 
 % calculate!
 for i = 1:length(df)
@@ -31,7 +31,7 @@ for i = 1:length(df)
     deltaSpd = []; % preallocate for change in speed over course of track
     
     for wn = 1:length(whale) % for each whale in the encounter
-        if ~isempty(whale{wn}) && height(whale{wn}) > 5
+        if ~isempty(whale{wn}) && size(whale{wn},2)>14
         a = whale{wn}.wlocSmooth; % grab the loc points
         if isnan(a)
         continue
@@ -72,7 +72,7 @@ for i = 1:length(df)
         totalDist(1,wn) = sumDist;
         totalT = seconds(t{wn}(end)-t{wn}(1));
         totalSpd(1,wn) = totalDist(1,wn)/(totalT);
-        meanSpd(1,wn) = mean(spd(:,wn));
+        meanSpd(1,wn) = nanmean(spd(:,wn));
         deltaSpd(1,wn) = abs(max(spd(find(spd(:,wn)),wn))) - abs(min(spd(find(spd(:,wn)),wn)));
         
         end

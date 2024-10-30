@@ -5,19 +5,19 @@
 % start with H 72
 
 % load in the whale structs
-deployment = 'SOCAL_W_05';
-deploymentName = 'SOCAL W 05';
+deployment = 'SOCAL_N_68';
+deploymentName = 'SOCAL N 68';
 
-df = dir('F:\Tracking\Erics_detector\SOCAL_W_05\new\cleaned_tracks\*track*'); % directory of folders containing files
+df = dir('F:\Tracking\Erics_detector\SOCAL_N_68\cleaned_tracks\*track*'); % directory of folders containing files
 numTracks = length(df);
 
-load('F:\Tracking\Instrument_Orientation\SOCAL_W_05\SOCAL_W_05_WE\REDO\SOCAL_W_05_WE_harp4chParams');
+load('F:\Tracking\Instrument_Orientation\SOCAL_N_68\SOCAL_N_68_NS\dep\SOCAL_N_68_NS_harp4chParams');
 hydLoc{1} = recLoc;
 clear recLoc
-load('F:\Tracking\Instrument_Orientation\SOCAL_W_05\SOCAL_W_05_WS\REDO\SOCAL_W_05_WS_harp4chParams');
+load('F:\Tracking\Instrument_Orientation\SOCAL_N_68\SOCAL_N_68_NW\dep\SOCAL_N_68_NW_harp4chParams');
 hydLoc{2} = recLoc;
 h0 = mean([hydLoc{1}; hydLoc{2}]);
-hydLoc{3} = [33.54196  -120.25820 -1510.562];
+% hydLoc{3} = [33.54196  -120.25820 -1510.562];
 
 % depth of midpoint between arrays
 zHS = abs(hydLoc{1}(3));
@@ -36,7 +36,7 @@ for i = 1:length(df) % for each track
         
         if isempty(whale{1,wn})
             continue
-        end
+        elseif size(whale{wn},2)>14
       
         zvals = whale{1,wn}.wlocSmooth(:,3); % grab the z vals
         zmax = max(zvals); % find the max
@@ -68,6 +68,8 @@ for i = 1:length(df) % for each track
         d = abs(d) + abs(d2);
 
         z_stats(7,wn) = d; % save the value
+
+        end
 
     end
     

@@ -5,20 +5,20 @@
 
 % first, plot as points with stdev error bars
 % a = load('F:\Tracking\Erics_detector\SOCAL_W_01\deployment_stats\SOCAL_W_01_mean_distfromsf.mat');
-% b = load('F:\Tracking\Erics_detector\SOCAL_W_02\deployment_stats\SOCAL_W_02_mean_distfromsf.mat');
-% c = load('F:\Tracking\Erics_detector\SOCAL_W_03\deployment_stats\SOCAL_W_03_mean_distfromsf.mat');
+% b = load('F:\Tracking\Erics_detector\SOCAL_W_02\deployment_stats\SOCAL_W_02_mean_distfromsf_NEW.mat');
+% c = load('F:\Tracking\Erics_detector\SOCAL_W_03\deployment_stats\SOCAL_W_03_mean_distfromsf_NEW.mat');
 % d = load('F:\Tracking\Erics_detector\SOCAL_W_04\deployment_stats\SOCAL_W_04_mean_distfromsf.mat');
 % full = horzcat(a.distfromsfmeans,b.distfromsfmeans,c.distfromsfmeans,d.distfromsfmeans);
-% a = load('F:\Tracking\Erics_detector\SOCAL_E_63\deployment_stats\SOCAL_E_63_mean_distfromsf.mat');
-% a = load('F:\Tracking\Erics_detector\SOCAL_N_68\Zc\deployment_stats\SOCAL_N_68_mean_distfromsf.mat');
-% full = a.distfromsfmeans
-% a = load('F:\Tracking\Erics_detector\SOCAL_H_72\deployment_stats\SOCAL_H_72_mean_distfromsf.mat');
-% b = load('F:\Tracking\Erics_detector\SOCAL_H_73\deployment_stats\SOCAL_H_73_mean_distfromsf.mat');
-% c = load('F:\Tracking\Erics_detector\SOCAL_H_74\deployment_stats\SOCAL_H_74_mean_distfromsf.mat');
-% d = load('F:\Tracking\Erics_detector\SOCAL_H_75\deployment_stats\SOCAL_H_75_mean_distfromsf.mat');
+a = load('F:\Tracking\Erics_detector\SOCAL_E_63\deployment_stats\SOCAL_E_63_mean_distfromsf_NEW.mat');
+% a = load('F:\Tracking\Erics_detector\SOCAL_N_68\Zc\deployment_stats\SOCAL_N_68_mean_distfromsf_NEW.mat');
+full = a.distfromsfmeans
+% a = load('F:\Tracking\Erics_detector\SOCAL_H_72\deployment_stats\SOCAL_H_72_mean_distfromsf_NEW.mat');
+% b = load('F:\Tracking\Erics_detector\SOCAL_H_73\deployment_stats\SOCAL_H_73_mean_distfromsf_NEW.mat');
+% c = load('F:\Tracking\Erics_detector\SOCAL_H_74\deployment_stats\SOCAL_H_74_mean_distfromsf_NEW.mat');
+% d = load('F:\Tracking\Erics_detector\SOCAL_H_75\deployment_stats\SOCAL_H_75_mean_distfromsf_NEW.mat');
 % full = horzcat(a.distfromsfmeans,b.distfromsfmeans,c.distfromsfmeans,d.distfromsfmeans);
-a = load('F:\Tracking\Erics_detector\SOCAL_W_01\deployment_stats\SOCAL_W_01_mean_distfromsf_NEW.mat');
-full = a.distfromsfmeans;
+% a = load('F:\Tracking\Erics_detector\SOCAL_W_05\deployment_stats\SOCAL_W_05_mean_distfromsf_NEW.mat');
+% full = a.distfromsfmeans;
 
 
 % define a colormap

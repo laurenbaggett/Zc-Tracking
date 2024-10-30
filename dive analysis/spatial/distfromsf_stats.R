@@ -55,21 +55,27 @@ data = rbind(sh,eh,nh,wh)
 colnames(data) = c("avg","site","class")
 data$site = as.factor(data$site)
 
-data = subset(data,avg>-0)
+# data = subset(data,avg>-0)
 
-ggbetweenstats(data = data,
-               x = site,
-               y = avg)
+# ggbetweenstats(data = data,
+#                x = site,
+#                y = avg)
 
 data$site = factor(data$site, levels = c("W","H","E","N"))
 
+medians <- data %>%
+  group_by(site) %>%
+  summarise(med = median(avg))
+
 ggplot(data, aes(x = as.factor(site), y=avg, color=site)) +
-  geom_violin(width=1) +
-  geom_boxplot(width=0.1) +
+  geom_violin(width=1, aes(fill=site), show.legend = FALSE) +
+  geom_boxplot(width=0.15, color="black", fill="white") +
   theme_classic() +
   xlab("Site") +
   ylab("Average Distance Above Seafloor (m)") +
-  stat_summary(fun.y="mean", geom="point", size=2, color="red")
+  stat_summary(fun.y="mean", geom="point", size=2, show.legend=FALSE) +
+  geom_text(data=medians, aes(x=factor(site), y=med, label=round(med,1)),
+            hjust=-.35, vjust = -0.5, color="black")
   
 
 # run kruskal-wallis
@@ -83,10 +89,10 @@ kruskal.test(avg~site, data=data)
 dunnTest(avg~site, data=data,
          method="bh")
 
-# Comparison           Z      P.unadj        P.adj
-# 1      E - H -12.4650054 1.158639e-35 6.951836e-35
-# 2      E - N  -8.3948476 4.664990e-17 9.329980e-17
-# 3      H - N  -0.9798838 3.271435e-01 3.271435e-01 # not different
-# 4      E - W  -6.1036173 1.036944e-09 1.244333e-09
-# 5      H - W   9.6714486 3.986940e-22 1.196082e-21
-# 6      N - W   6.1115053 9.869574e-10 1.480436e-09
+# Comparison          Z      P.unadj        P.adj
+# 1      E - H -11.293490 1.413114e-29 8.478686e-29
+# 2      E - N  -7.304241 2.788354e-13 5.576707e-13
+# 3      H - N  -0.187226 8.514835e-01 8.514835e-01 # not different
+# 4      E - W  -6.834024 8.256511e-12 1.238477e-11
+# 5      H - W   7.590824 3.178772e-14 9.536317e-14
+# 6      N - W   4.323790 1.533712e-05 1.840454e-05

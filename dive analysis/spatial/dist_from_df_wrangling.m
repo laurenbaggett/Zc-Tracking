@@ -8,12 +8,12 @@
 % h74 = load('F:\Tracking\Erics_detector\SOCAL_H_74\deployment_stats\SOCAL_H_74_mean_distfromsf_NEW.mat');
 % h75 = load('F:\Tracking\Erics_detector\SOCAL_H_75\deployment_stats\SOCAL_H_75_mean_distfromsf_NEW.mat');
 % full = horzcat(h72.distfromsfmeans, h73.distfromsfmeans, h74.distfromsfmeans);
-% site E
-a = load('F:\Tracking\Erics_detector\SOCAL_E_63\deployment_stats\SOCAL_E_63_mean_distfromsf_NEW.mat');
-full = a.distfromsfmeans;
-% % site N
-% a = load('F:\Tracking\Erics_detector\SOCAL_N_68\deployment_stats\SOCAL_N_68_mean_distfromsf_NEW.mat');
+% % site E
+% a = load('F:\Tracking\Erics_detector\SOCAL_E_63\deployment_stats\SOCAL_E_63_mean_distfromsf_NEW.mat');
 % full = a.distfromsfmeans;
+% % site N
+a = load('F:\Tracking\Erics_detector\SOCAL_N_68\deployment_stats\SOCAL_N_68_mean_distfromsf_NEW.mat');
+full = a.distfromsfmeans;
 % % site W
 % a = load('F:\Tracking\Erics_detector\SOCAL_W_01\deployment_stats\SOCAL_W_01_mean_distfromsf_NEW.mat');
 % b = load('F:\Tracking\Erics_detector\SOCAL_W_02\deployment_stats\SOCAL_W_02_mean_distfromsf_NEW.mat');
@@ -35,7 +35,7 @@ for i = 1:length(full)
         sd = vertcat(sd,whale(2,wn));
         clss = vertcat(clss,whale(4,wn));
         tnum = vertcat(tnum,whale(3,wn));
-        med = vertcat(med,whale(5,wn));
+        % med = vertcat(med,whale(5,wn));
     end
 end
 
@@ -43,6 +43,6 @@ end
 % sd = str2double(sd);
 % clss = str2double(clss);
 
-mdfsf = table(avg,sd,clss, tnum, med);
+mdfsf = table(avg,sd,clss, tnum);
 
-writetable(mdfsf, 'F:\Tracking\Erics_detector\siteE_disffromsf_masterTable_NEW.csv');
+writetable(mdfsf, 'F:\Tracking\Erics_detector\siteN_disffromsf_masterTable_NEW.csv');

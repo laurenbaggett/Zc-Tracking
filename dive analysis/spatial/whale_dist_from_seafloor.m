@@ -4,14 +4,14 @@
 % time
 
 %% define site
-% W 01
-load('F:\Tracking\Instrument_Orientation\SOCAL_W_01\SOCAL_W_01_WE\dep\SOCAL_W_01_WE_harp4chPar');
-hydLoc{1} = recLoc;
-clear recLoc
-load('F:\Tracking\Instrument_Orientation\SOCAL_W_01\SOCAL_W_01_WS\dep\SOCAL_W_01_WS_harp4chPar');
-hydLoc{2} = recLoc;
-h0 = mean([hydLoc{1}; hydLoc{2}]);
-hydLoc{3} = [33.53973  -120.25815 -1377.8741];
+% % W 01
+% load('F:\Tracking\Instrument_Orientation\SOCAL_W_01\SOCAL_W_01_WE\dep\SOCAL_W_01_WE_harp4chPar');
+% hydLoc{1} = recLoc;
+% clear recLoc
+% load('F:\Tracking\Instrument_Orientation\SOCAL_W_01\SOCAL_W_01_WS\dep\SOCAL_W_01_WS_harp4chPar');
+% hydLoc{2} = recLoc;
+% h0 = mean([hydLoc{1}; hydLoc{2}]);
+% hydLoc{3} = [33.53973  -120.25815 -1377.8741];
 % % W 02
 % load('F:\Tracking\Instrument_Orientation\SOCAL_W_02\SOCAL_W_02_WE\dep\SOCAL_W_02_WE_dep_harp4chParams');
 % hydLoc{1} = recLoc;
@@ -84,14 +84,14 @@ hydLoc{3} = [33.53973  -120.25815 -1377.8741];
 % h0 = mean([hydLoc{1}; hydLoc{2}]);
 % hydLoc{3} = [32.86216  -119.13519 -1284.5215];
 
-% % N 68
-% load('F:\Tracking\Instrument_Orientation\SOCAL_N_68\SOCAL_N_68_NS\dep\SOCAL_N_68_NS_harp4chParams');
-% hydLoc{1} = recLoc;
-% clear recLoc
-% load('F:\Tracking\Instrument_Orientation\SOCAL_N_68\SOCAL_N_68_NW\dep\SOCAL_N_68_NW_harp4chParams');
-% hydLoc{2} = recLoc;
-% h0 = mean([hydLoc{1}; hydLoc{2}]);
-% hydLoc{3} = [32.36975  -118.56458 -1298.3579];
+% N 68
+load('F:\Tracking\Instrument_Orientation\SOCAL_N_68\SOCAL_N_68_NS\dep\SOCAL_N_68_NS_harp4chParams');
+hydLoc{1} = recLoc;
+clear recLoc
+load('F:\Tracking\Instrument_Orientation\SOCAL_N_68\SOCAL_N_68_NW\dep\SOCAL_N_68_NW_harp4chParams');
+hydLoc{2} = recLoc;
+h0 = mean([hydLoc{1}; hydLoc{2}]);
+hydLoc{3} = [32.36975  -118.56458 -1298.3579];
 
 % load in the bathymetry data
 lon = ncread('F:\Tracking\bathymetry\GEBCO\gebco_2023_n34.0_s31.0_w-121.0_e-117.0.nc','lon');
@@ -123,7 +123,7 @@ z = cast(z,"double");
 % save
 % calculate an average value? save per deployment?
 
-df = dir(['F:\Tracking\Erics_detector\SOCAL_W_01\cleaned_tracks\track*']); % directory of folders containing files
+df = dir(['F:\Tracking\Erics_detector\SOCAL_N_68\cleaned_tracks\track*']); % directory of folders containing files
 distfromsfmeans = [];
 
 for i = 1:length(df) % for each track
@@ -198,5 +198,5 @@ for i = 1:length(df) % for each track
 
 end
 
-save('F:\Tracking\Erics_detector\SOCAL_W_01\deployment_stats\SOCAL_W_01_mean_distfromsf_NEW.mat','distfromsfmeans'); % save the struct
+save('F:\Tracking\Erics_detector\SOCAL_N_68\deployment_stats\SOCAL_N_68_mean_distfromsf_NEW.mat','distfromsfmeans'); % save the struct
 

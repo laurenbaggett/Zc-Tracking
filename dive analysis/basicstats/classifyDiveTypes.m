@@ -1,6 +1,6 @@
 %% make a table of z values for each track
 
-df = dir('F:\Tracking\Erics_detector\SOCAL_W_05\cleaned_tracks\track*');
+df = dir('F:\Tracking\Erics_detector\SOCAL_W_01\cleaned_tracks\track*');
 
 z_vals = NaN(length(df),10);
 
@@ -31,7 +31,7 @@ end
             % dive fits in none of these parameters, will be reviewed
             % manually
 
-df = dir('F:\Tracking\Erics_detector\SOCAL_W_05\new\cleaned_tracks\track*');
+df = dir('F:\Tracking\Erics_detector\SOCAL_N_68\cleaned_tracks\track*');
 
 for i = 1:length(df)
     

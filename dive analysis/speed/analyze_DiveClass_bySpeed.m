@@ -13,7 +13,7 @@ xc = [];
 xd = [];
 xe = [];
 
-for i = 144:length(a)
+for i = 3:length(a)
     
     myFile = dir([a(i).folder,'\',a(i).name,'\z_stats.mat']); % load the folder name
     load(fullfile([myFile.folder,'\',myFile.name]));
