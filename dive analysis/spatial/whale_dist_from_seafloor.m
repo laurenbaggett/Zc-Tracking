@@ -4,14 +4,14 @@
 % time
 
 %% define site
-% % W 01
-% load('F:\Tracking\Instrument_Orientation\SOCAL_W_01\SOCAL_W_01_WE\dep\SOCAL_W_01_WE_harp4chPar');
-% hydLoc{1} = recLoc;
-% clear recLoc
-% load('F:\Tracking\Instrument_Orientation\SOCAL_W_01\SOCAL_W_01_WS\dep\SOCAL_W_01_WS_harp4chPar');
-% hydLoc{2} = recLoc;
-% h0 = mean([hydLoc{1}; hydLoc{2}]);
-% hydLoc{3} = [33.53973  -120.25815 -1377.8741];
+% W 01
+load('F:\Tracking\Instrument_Orientation\SOCAL_W_01\SOCAL_W_01_WE\dep\SOCAL_W_01_WE_harp4chPar');
+hydLoc{1} = recLoc;
+clear recLoc
+load('F:\Tracking\Instrument_Orientation\SOCAL_W_01\SOCAL_W_01_WS\dep\SOCAL_W_01_WS_harp4chPar');
+hydLoc{2} = recLoc;
+h0 = mean([hydLoc{1}; hydLoc{2}]);
+hydLoc{3} = [33.53973  -120.25815 -1377.8741];
 % % W 02
 % load('F:\Tracking\Instrument_Orientation\SOCAL_W_02\SOCAL_W_02_WE\dep\SOCAL_W_02_WE_dep_harp4chParams');
 % hydLoc{1} = recLoc;
@@ -21,13 +21,13 @@
 % h0 = mean([hydLoc{1}; hydLoc{2}]);
 % hydLoc{3} = [33.54057  -120.25866 -1370.4091];
 % % W 03
-load('F:\Tracking\Instrument_Orientation\SOCAL_W_03\SOCAL_W_03_WS\dep\SOCAL_W_03_WS_harp4chParams');
-hydLoc{1} = recLoc;
-clear recLoc
-load('F:\Tracking\Instrument_Orientation\SOCAL_W_03\SOCAL_W_03_WE\dep\SOCAL_W_03_WE_harp4chParams');
-hydLoc{2} = recLoc;
-h0 = mean([hydLoc{1}; hydLoc{2}]);
-hydLoc{3} = [33.54117  -120.25922 -1383.9635];
+% load('F:\Tracking\Instrument_Orientation\SOCAL_W_03\SOCAL_W_03_WS\dep\SOCAL_W_03_WS_harp4chParams');
+% hydLoc{1} = recLoc;
+% clear recLoc
+% load('F:\Tracking\Instrument_Orientation\SOCAL_W_03\SOCAL_W_03_WE\dep\SOCAL_W_03_WE_harp4chParams');
+% hydLoc{2} = recLoc;
+% h0 = mean([hydLoc{1}; hydLoc{2}]);
+% hydLoc{3} = [33.54117  -120.25922 -1383.9635];
 % % W 04
 % load('F:\Tracking\Instrument_Orientation\SOCAL_W_04\SOCAL_W_04_WS\dep\SOCAL_W_04_WS_harp4chParams');
 % hydLoc{1} = recLoc;
@@ -63,7 +63,7 @@ hydLoc{3} = [33.54117  -120.25922 -1383.9635];
 % load('F:\Tracking\Instrument_Orientation\SOCAL_H_73\SOCAL_H_73_HS\dep\SOCAL_H_73_HS_harp4chParams');
 % hydLoc{1} = recLoc;
 % clear recLoc
-% load('F:\Tracking\Instrument_Orientation\SOCAL_H_73\SOCAL_H_73_HW\dep\SOCAL_H_73_harp4chParams');
+% load('F:\Tracking\Instrument_Orientation\SOCAL_H_73\SOCAL_H_73_HW\dep\SOCAL_H_73_HW_harp4chParams');
 % hydLoc{2} = recLoc;
 % h0 = mean([hydLoc{1}; hydLoc{2}]);
 % hydLoc{3} = [32.86098  -119.13526 -1268.0248];
@@ -97,6 +97,10 @@ hydLoc{3} = [33.54117  -120.25922 -1383.9635];
 lon = ncread('F:\Tracking\bathymetry\GEBCO\gebco_2023_n34.0_s31.0_w-121.0_e-117.0.nc','lon');
 lat = ncread('F:\Tracking\bathymetry\GEBCO\gebco_2023_n34.0_s31.0_w-121.0_e-117.0.nc','lat');
 elev = ncread('F:\Tracking\bathymetry\GEBCO\gebco_2023_n34.0_s31.0_w-121.0_e-117.0.nc','elevation');
+% load('F:\Tracking\bathymetry\socal2');
+% lon = X;
+% lat = Y;
+% elev = Z;
 
 % restrict to just a certain distance around the site
 % convert lat lon to meters, from Eric
@@ -119,7 +123,7 @@ z = cast(z,"double");
 % save
 % calculate an average value? save per deployment?
 
-df = dir(['F:\Tracking\Erics_detector\SOCAL_W_03\cleaned_tracks\track*']); % directory of folders containing files
+df = dir(['F:\Tracking\Erics_detector\SOCAL_W_01\cleaned_tracks\track*']); % directory of folders containing files
 distfromsfmeans = [];
 
 for i = 1:length(df) % for each track
@@ -131,19 +135,19 @@ for i = 1:length(df) % for each track
     trackNum = extractAfter(myFile(1).folder,'cleaned_tracks\'); % grab the track num for naming later
     load(fullfile([myFile(1).folder,'\',myFile(1).name])); % load the file
 
-    for b = 1:numel(whale) % remove any fields that are 0x0
-        if height(whale{b}) == 0
-            whale{b} = [];
-        end
-    end
-    whale(cellfun('isempty',whale)) = []; % remove any empty fields
+    % for b = 1:numel(whale) % remove any fields that are 0x0
+    %     if height(whale{b}) == 0
+    %         whale{b} = [];
+    %     end
+    % end
+    % whale(cellfun('isempty',whale)) = []; % remove any empty fields
 
     distfromsf = []; % initialize
     mn = []; % initialize again
 
     for wn = 1:length(whale) % for each whale
 
-        if ~isnan(whale{wn}.wlocSmooth)
+        if size(whale{wn},2)>14 % if we generated a smooth
             
             % convert smoothed location to lat/lon/depth
             [lat, lon] = xy2latlon_wgs84(whale{wn}.wlocSmooth(:,1),whale{wn}.wlocSmooth(:,2),h0(1),h0(2));
@@ -166,10 +170,11 @@ for i = 1:length(df) % for each track
             end
 
             distfromsf{wn} = abovesf; % save for this whale
-            mn{1,wn} = mean(abovesf(:,2)); % save the mean value
-            mn{2,wn} = std(abovesf(:,2)); % save the standard deviation
+            mn{1,wn} = nanmean(abovesf(:,2)); % save the mean value
+            mn{2,wn} = nanstd(abovesf(:,2)); % save the standard deviation
             mn{3,wn} = trackNum;
             mn{4,wn} = z_stats(6,wn);
+            mn{5,wn} = nanmedian(abovesf(:,2));
 
         end
 
@@ -193,5 +198,5 @@ for i = 1:length(df) % for each track
 
 end
 
-save('F:\Tracking\Erics_detector\SOCAL_W_05\new\SOCAL_W_05_NEW_mean_distfromsf.mat','distfromsfmeans'); % save the struct
+save('F:\Tracking\Erics_detector\SOCAL_W_01\deployment_stats\SOCAL_W_01_mean_distfromsf_NEW.mat','distfromsfmeans'); % save the struct
 

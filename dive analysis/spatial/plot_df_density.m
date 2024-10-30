@@ -28,6 +28,8 @@ for i = 1:length(df) % for each track
     for b = 1:numel(whale) % remove any fields that are 0x0
         if height(whale{b}) <= 2
             whale{b} = [];
+        elseif size(whale{b},2)<15
+            whale{b} = [];
         end
     end
     whale(cellfun('isempty',whale)) = []; % remove any empty fields
@@ -123,7 +125,7 @@ load('F:\Tracking\bathymetry\socal2');
 % hydLoc{2} = recLoc;
 % h0 = mean([hydLoc{1}; hydLoc{2}]);
 % hydLoc{3} = [32.36975  -118.56458 -1298.3579];
-% 
+
 % E 63
 hydLoc{2} = [32.65871  -119.47711 -1325.5285]; % EE
 hydLoc{1} = [32.65646  -119.48815 -1330.1631]; % EW
@@ -147,8 +149,8 @@ hydLoc{3} = [32.65345  -119.48455 -1328.9836]; % ES
 h1(3) = abs(h0(3))-abs(hydLoc{1}(3));
 [h2(1), h2(2)] = latlon2xy_wgs84(hydLoc{2}(1), hydLoc{2}(2), h0(1), h0(2));
 h2(3) = abs(h0(3))-abs(hydLoc{2}(3));
-% [h3(1), h3(2)] = latlon2xy_wgs84(hydLoc{3}(1), hydLoc{3}(2), h0(1), h0(2));
-% h3(3) = abs(h0(3))-abs(hydLoc{3}(3));
+[h3(1), h3(2)] = latlon2xy_wgs84(hydLoc{3}(1), hydLoc{3}(2), h0(1), h0(2));
+h3(3) = abs(h0(3))-abs(hydLoc{3}(3));
 
 % convert lat lon to meters, from Eric
 plotAx = [-4000, 4000, -4000, 4000];

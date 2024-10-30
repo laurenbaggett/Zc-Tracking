@@ -17,7 +17,7 @@
 % c = load('F:\Tracking\Erics_detector\SOCAL_H_74\deployment_stats\SOCAL_H_74_mean_distfromsf.mat');
 % d = load('F:\Tracking\Erics_detector\SOCAL_H_75\deployment_stats\SOCAL_H_75_mean_distfromsf.mat');
 % full = horzcat(a.distfromsfmeans,b.distfromsfmeans,c.distfromsfmeans,d.distfromsfmeans);
-a = load('F:\Tracking\Erics_detector\SOCAL_W_05\new\SOCAL_W_05_NEW_mean_distfromsf.mat');
+a = load('F:\Tracking\Erics_detector\SOCAL_W_01\deployment_stats\SOCAL_W_01_mean_distfromsf_NEW.mat');
 full = a.distfromsfmeans;
 
 
@@ -48,7 +48,7 @@ for i = 1:numel(full)
     whale = full{i};
     for wn = 1:size(whale,2)
         hval = vertcat(hval, cell2mat(whale(1,wn)));
-        if cell2mat(whale(1,wn))<-50
+        if cell2mat(whale(1,wn))<0
             disp(string(whale(3,wn)))
         end
     end
