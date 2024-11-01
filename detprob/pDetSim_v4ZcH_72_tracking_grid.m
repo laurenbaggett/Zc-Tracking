@@ -394,9 +394,9 @@ Iy = find(y>=plotAx(3)-100 & y<=plotAx(4)+100);
 figure
 h = imagesc(xline,yline,prb_plot,'AlphaData',0.8)
 set(h,'AlphaData',~isnan(prb_plot))
-c = cmocean('matter');
-% c = colormap(flipud(hot));
-% c = c(50:end,:);
+c = cmocean('matter')
+% c = flipud(cmocean('ice')); % flipud(cmocean('solar'));
+% c = c(10:end,:);
 colormap(c)
 colorbar
 hold on

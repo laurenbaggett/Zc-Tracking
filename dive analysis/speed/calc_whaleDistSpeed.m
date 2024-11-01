@@ -10,7 +10,7 @@
 % divide total distance by total time to get the average speed
 
 % load in the data
-df = dir('F:\Tracking\Erics_detector\SOCAL_E_63\cleaned_tracks\track*');
+df = dir('F:\Tracking\Erics_detector\SOCAL_N_68\cleaned_tracks\track*');
 
 % calculate!
 for i = 1:length(df)
@@ -25,13 +25,14 @@ for i = 1:length(df)
     spd = []; % preallocate to hold speed in m/s
     t = []; % preallocate to hold time vectors for each whale
     
-    totalDist = []; % preallocate for total distance
-    totalSpd = []; % preallocate for total speed
-    meanSpd = []; % preallocate for mean speed
-    deltaSpd = []; % preallocate for change in speed over course of track
+    totalDist = nan(1,numel(whale)); % preallocate for total distance
+    totalSpd = nan(1,numel(whale)); % preallocate for total speed
+    meanSpd = nan(1,numel(whale)); % preallocate for mean speed
+    medianSpd = nan(1,numel(whale)); % preallocate for median speeds
+    deltaSpd = nan(1,numel(whale)); % preallocate for change in speed over course of track
     
     for wn = 1:length(whale) % for each whale in the encounter
-        if ~isempty(whale{wn}) && size(whale{wn},2)>14
+        if size(whale{wn},2)>14
         a = whale{wn}.wlocSmooth; % grab the loc points
         if isnan(a)
         continue
@@ -68,11 +69,12 @@ for i = 1:length(df)
         end
         
         % get rid of any speed values from more than 5 minutes apart
-        sumDist = sum(dist(:,wn));
+        sumDist = nansum(dist(:,wn));
         totalDist(1,wn) = sumDist;
         totalT = seconds(t{wn}(end)-t{wn}(1));
         totalSpd(1,wn) = totalDist(1,wn)/(totalT);
         meanSpd(1,wn) = nanmean(spd(:,wn));
+        medianSpd(1,wn) = nanmedian(spd(:,wn));
         deltaSpd(1,wn) = abs(max(spd(find(spd(:,wn)),wn))) - abs(min(spd(find(spd(:,wn)),wn)));
         
         end
@@ -103,7 +105,7 @@ for i = 1:length(df)
 %     end
     
     % save this track
-    save([myFile.folder,'\',trackNum,'_distSpd.mat'],'dist','tms','spd','totalDist','totalSpd','meanSpd','deltaSpd');
+    save([myFile.folder,'\',trackNum,'_distSpd.mat'],'dist','tms','spd','totalDist','totalSpd','meanSpd','medianSpd','deltaSpd');
 %    saveas(figure(1),[myFile.folder,'\',trackNum,'_distSpdPlot.jpg']);
     
 %    close all
