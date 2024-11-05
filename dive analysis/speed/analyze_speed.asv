@@ -206,13 +206,10 @@ histogram(mSpDesc(find(site_desc==4)),[0:1:10],'facecolor',[0.4660 0.6740 0.1880
 title('N')
 ylim([0 20])
 
-% doesn't seem to be much of a difference here
 
 
 % % export for R analysis
-forage = table(mSp',stdSp',site,'VariableNames',{'median','std','site'});
-descend = table(mSpDesc',stdSpDesc',site_desc,'VariableNames',{'median','std','site'});
-writetable(forage,'F:\Zc_Analysis\speed\speeds_atDepth.csv')
-writetable(descend,'F:\Zc_Analysis\speed\speeds_descending.csv')
+% writetable('F:\Zc_Analysis\speed\speeds_atDepth.csv',[mSp',stdSp'])
+% writetable('F:\Zc_Analysis\speed\speeds_descending.csv',[mSpDesc',stdSpDesc'])
 
 %%

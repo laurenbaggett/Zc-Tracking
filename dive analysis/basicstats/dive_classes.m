@@ -48,9 +48,8 @@ for j = 1:length(deps)
             end % for loop for whale number
 
             if any(~isnan(turns))
-                save([df(i).folder,'\',df(i).name,'\',trackNum,'_turns.mat']) % save the matrix
+                save([df(i).folder,'\',df(i).name,'\',trackNum,'_turns.mat'],'turns') % save the matrix
                 disp(string(trackNum))
-
             end
 
         end % for loop for data frame
