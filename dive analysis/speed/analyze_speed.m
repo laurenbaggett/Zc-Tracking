@@ -147,25 +147,27 @@ for j = 1:length(deps)
 end
 
 % plot all
-subplot(2,2,1)
-histogram(mSp,[0:1:15],'facecolor',[0 0.4470 0.7410],'facealpha',1)
+figure
+subplot(1,2,1)
+histogram(mSp,[0:1:10],'facecolor',[0 0.4470 0.7410],'facealpha',1)
 title('At Depth (Foraging)')
 xlabel('Median Speed');
 
-subplot(2,2,2)
-histogram(mSpDesc,[0:1:15],'facecolor',[0.8500 0.3250 0.0980],'facealpha',1)
+subplot(1,2,2)
+histogram(mSpDesc,[0:1:10],'facecolor',[0.8500 0.3250 0.0980],'facealpha',1)
 title('Initial Descent')
 xlabel('Median Speed');
 
-subplot(2,2,3)
-histogram(stdSp,[0:1:15],'facecolor',[0 0.4470 0.7410],'facealpha',.5)
-xlabel('Std Speed');
-
-subplot(2,2,4)
-histogram(stdSpDesc,[0:1:15],'facecolor',[0.8500 0.3250 0.0980],'facealpha',.5)
-xlabel('Std Speed');
+% subplot(2,2,3)
+% histogram(stdSp,[0:1:15],'facecolor',[0 0.4470 0.7410],'facealpha',.5)
+% xlabel('Std Speed');
+% 
+% subplot(2,2,4)
+% histogram(stdSpDesc,[0:1:15],'facecolor',[0.8500 0.3250 0.0980],'facealpha',.5)
+% xlabel('Std Speed');
 
 % now, plot by site
+figure
 subplot(2,4,5)
 histogram(mSp(find(site==1)),[0:1:10],'facecolor',[0 0.4470 0.7410],'facealpha',.6)
 ylabel('At Depth (Foraging)')
@@ -202,7 +204,7 @@ ylim([0 20])
 title('E')
 
 subplot(2,4,4)
-histogram(mSpDesc(find(site_desc==4)),[0:1:10],'facecolor',[0.4660 0.6740 0.1880],'facealpha',1)
+histogram(mSpDesc(find(site_desc==4)),[0:1:10],'facecolor',[0.4660 0. 6740 0.1880],'facealpha',1)
 title('N')
 ylim([0 20])
 

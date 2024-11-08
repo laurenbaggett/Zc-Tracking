@@ -6,6 +6,10 @@
 
 % load the whale struct
 load('F:\Tracking\Erics_detector\SOCAL_W_05\cleaned_tracks\track110\track110_loc3D_DOA_whale.mat')
+% load('F:\Tracking\Erics_detector\SOCAL_W_05\cleaned_tracks\track15\track15_loc3D_DOA_whale.mat');
+% load('F:\Tracking\Erics_detector\SOCAL_W_05\cleaned_tracks\track27\track27_loc3D_DOA_whale.mat');
+% load('F:\Tracking\Erics_detector\SOCAL_W_05\cleaned_tracks\track37\track37_loc3D_DOA_whale.mat');
+
 
 % load bathymetry
 load('F:\Tracking\bathymetry\socal2');
