@@ -1,4 +1,110 @@
 %% dist_from_sf_wrangling
+% modified to account for new dive classifications
+
+% deps = {'SOCAL_W_01','SOCAL_W_02','SOCAL_W_03','SOCAL_W_04','SOCAL_W_05'};
+% deps = {'SOCAL_H_72','SOCAL_H_73','SOCAL_H_74','SOCAL_H_75'};
+% deps = {'SOCAL_E_63'};
+% deps = {'SOCAL_N_68'};
+deps = {'SOCAL_W_01','SOCAL_W_02','SOCAL_W_03','SOCAL_W_04','SOCAL_W_05', ...
+    'SOCAL_H_72','SOCAL_H_73','SOCAL_H_74','SOCAL_H_75', ...
+    'SOCAL_E_63','SOCAL_N_68'};
+
+mDst = [];
+stdDst = [];
+site_desc = []; % 1 is W, 2 is H, 3 is E, 4 is N
+site = [];
+% class = [];
+init = 0;
+deep = 0;
+
+for j = 1:length(deps)
+
+    df = dir(['F:\Tracking\Erics_detector\',char(deps(j)),'\cleaned_tracks\track*']);
+
+    for i = 1:length(df)
+
+        myFile = dir([df(i).folder,'\',df(i).name,'\*distFromSeafloor.mat']); % load the folder name
+        trackNum = extractAfter(myFile(1).folder,'cleaned_tracks\'); % grab the track num for naming later
+        load(fullfile([myFile(1).folder,'\',myFile(1).name])); % load the file
+        % z_stats is outdated, look for turns
+        myFile = dir([df(i).folder,'\',df(i).name,'\*turns.mat']); % load the folder name
+
+        if ~isempty(myFile) % if we have a turns file
+            load(fullfile([myFile.folder,'\',myFile.name])); % load the file
+            % brWhales = ~isnan(turns);
+            init = init+1;
+        else
+            turns = nan(1,numel(distfromsf)); % else, these whales are at depth
+            deep = deep+1;
+        end
+
+        for wn = 1:numel(distfromsf)
+
+            if size(distfromsf{wn},1)>0
+
+                if ~isnan(turns(wn)) % if we have a whale that needs to be separated into foraging sections only
+
+                    if turns(wn)<length(distfromsf{wn}(:,1))
+
+                            medDepth = nanmedian(distfromsf{wn}(turns(wn):end,2));
+                            stdDepth = nanstd(distfromsf{wn}(turns(wn):end,2));
+                            % if medDepth>200
+                            %     keyboard
+                            % end
+                            mDst = [mDst;medDepth];
+                            stdDst = [stdDst;stdDepth];
+                            stlet = deps{j}(7);
+
+                            stlet = deps{j}(7);
+                            if stlet == 'W'
+                                site = [site;1];
+                            elseif stlet == 'H'
+                                site = [site;2];
+                            elseif stlet == 'E'
+                                site = [site;3];
+                            elseif stlet == 'N'
+                                site = [site;4];
+                            end
+
+                    end
+
+                end
+
+                if sum(~isnan(distfromsf{wn}(:,1))) > 50 % size(distfromsf{wn}(:,1),1) > 20 % if we have at least 10 data points
+                    % medDepth = mn{1,wn};
+                    medDepth = nanmedian(distfromsf{wn}(:,2));
+                    % stdDepth = mn{2,wn};
+                    stdDepth = nanstd(distfromsf{wn}(:,2));
+                    % if medDepth>200
+                    %     keyboard
+                    % end
+                    mDst = [mDst;medDepth];
+                    stdDst = [stdDst;stdDepth];
+                    stlet = deps{j}(7);
+                    if stlet == 'W'
+                        site = [site;1];
+                    elseif stlet == 'H'
+                        site = [site;2];
+                    elseif stlet == 'E'
+                        site = [site;3];
+                    elseif stlet == 'N'
+                        site = [site;4];
+                    end
+                end
+            end
+        end
+            clear turns
+
+    end
+
+end
+
+mDstTable = table(mDst,stdDst,site,'VariableNames',{'median','std','site'});
+writetable(mDstTable,'F:\Tracking\allDeps_foragingOnly_distFromSf.csv');
+
+
+
+%% old code
 % LMB 3/13/24 2023a
 
 % load in the data

@@ -5,9 +5,9 @@
 % lat lon with bathymetry and then also z vs time
 
 % load the whale struct
-load('F:\Tracking\Erics_detector\SOCAL_W_05\cleaned_tracks\track110\track110_loc3D_DOA_whale.mat')
+% load('F:\Tracking\Erics_detector\SOCAL_W_05\cleaned_tracks\track110\track110_loc3D_DOA_whale.mat')
 % load('F:\Tracking\Erics_detector\SOCAL_W_05\cleaned_tracks\track15\track15_loc3D_DOA_whale.mat');
-% load('F:\Tracking\Erics_detector\SOCAL_W_05\cleaned_tracks\track27\track27_loc3D_DOA_whale.mat');
+load('F:\Tracking\Erics_detector\SOCAL_W_05\cleaned_tracks\track27\track27_loc3D_DOA_whale.mat');
 % load('F:\Tracking\Erics_detector\SOCAL_W_05\cleaned_tracks\track37\track37_loc3D_DOA_whale.mat');
 
 
@@ -71,4 +71,18 @@ for wn = 1:length(whale)
     end
 end
 % ylim([-600 0])
+
+% make a 3D view of this
+figure
+for wn = 1:length(whale)
+    if isempty(whale{wn})
+        continue
+    else
+        scatter3(whale{wn}.wloc(:,2),whale{wn}.wloc(:,1),whale{wn}.wloc(:,3)+h0(3),[],brushing.params.colorMat(wn+2, :)) % ,'color',brushing.params.colorMat(wn+2, :),'linewidth',3)
+        hold on
+        plot3(whale{wn}.wlocSmooth(:,2),whale{wn}.wlocSmooth(:,1),whale{wn}.wloc(:,3)+h0(3),'color',colorVec{wn},'linewidth',3)
+    end
+end
+box on
+view([60,10])
 

@@ -65,8 +65,10 @@ for j = 1:length(deps)
         if ~isempty(myFile) % if we have a turns file
             load(fullfile([myFile.folder,'\',myFile.name])); % load the file
             % brWhales = ~isnan(turns);
+            init = init+1;
         else
             turns = nan(1,numel(speedStruct)); % else, these whales are at depth
+            deep = deep+1;
         end
 
         for wn = 1:size(speedStruct)
@@ -95,7 +97,7 @@ for j = 1:length(deps)
                         elseif stlet == 'N'
                             site_desc = [site_desc;4];
                         end
-                        init = init+1;
+
                     end
 
                     if turns(wn)<length(speedStruct{wn}.values.spd)
@@ -120,7 +122,7 @@ for j = 1:length(deps)
                             elseif stlet == 'N'
                                 site = [site;4];
                             end
-                            deep = deep+1;
+
                         end
                     end
 
@@ -139,7 +141,6 @@ for j = 1:length(deps)
                     elseif stlet == 'N'
                         site = [site;4];
                     end
-                    deep = deep+1;
                 end
             end
             clear turns
