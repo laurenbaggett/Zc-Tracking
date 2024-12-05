@@ -61,12 +61,22 @@ nanmean(trackDur)
 nanmedian(encDur)
 nanmean(encDur)
 
-%% how many tracks do we have from brushDOA?
+%% how many tracks do we have from brushDOA? put these into cleanedTracksTable
 
-deps = {'SOCAL_W_01','SOCAL_W_02','SOCAL_W_03','SOCAL_W_04','SOCAL_W_05', ...
-    'SOCAL_H_72','SOCAL_H_73','SOCAL_H_74','SOCAL_H_75', ...
-    'SOCAL_E_63','SOCAL_N_68'};
+% deps = {'SOCAL_W_01','SOCAL_W_02','SOCAL_W_03','SOCAL_W_04','SOCAL_W_05'};
+% deps = {'SOCAL_H_72','SOCAL_H_73','SOCAL_H_74','SOCAL_H_75'};
+% deps = {'SOCAL_E_63'};
+deps = {'SOCAL_N_68'};
+% deps = {'SOCAL_W_01','SOCAL_W_02','SOCAL_W_03','SOCAL_W_04','SOCAL_W_05', ...
+%     'SOCAL_H_72','SOCAL_H_73','SOCAL_H_74','SOCAL_H_75', ...
+%     'SOCAL_E_63','SOCAL_N_68'};
 
+StNumstr = []; % preallocate for starting num
+EdNumstr = []; % preallocate for ending num
+encDur = []; % encounter duration
+StNum = []; % starting datenum
+EdNum = []; % ending datenum
+trackNum = []; % tracknumber
 numWhales = []; % preallocate for saving number of whales total
 
 for j = 1:length(deps) % for each deployment
@@ -77,18 +87,34 @@ for j = 1:length(deps) % for each deployment
             
             myFile = dir([df(i).folder,'\',df(i).name,'\*brushDOA*.mat']); % load the folder name
             if ~isempty(myFile)
-                trackNum = extractAfter(myFile(1).folder,'cleaned_tracks\'); % grab the track num for naming later
+                tnum = extractAfter(myFile(1).folder,'cleaned_tracks\track'); % grab the track num for naming later
                 load(fullfile([myFile(1).folder,'\',myFile(1).name])); % load the file
             else
                 myFile = dir([df(i).folder,'\',df(i).name,'\SOCAL*.mat']); % load the folder name
-                trackNum = extractAfter(myFile(1).folder,'cleaned_tracks\'); % grab the track num for naming later
+                tnum = extractAfter(myFile(1).folder,'cleaned_tracks\track'); % grab the track num for naming later
                 load(fullfile([myFile(1).folder,'\',myFile(1).name])); % load the file
             end
 
             first = length(unique(DET{1,1}.Label));
             second = length(unique(DET{1,2}.Label));
-
             numWhales = [numWhales;max([first,second])];
+
+            first = DET{1,1}.TDet(1);
+            second = DET{1,2}.TDet(1);
+            thisStNum = min([first,second]);
+            StNum = [StNum; thisStNum];
+            StNumstr = [StNumstr; datetime(thisStNum,'convertfrom','datenum')];
+            first = DET{1,1}.TDet(end);
+            second = DET{1,2}.TDet(end);
+            thisEdNum = max([first,second]);
+            EdNum = [EdNum; thisEdNum];
+            EdNumstr = [EdNumstr; datetime(thisEdNum,'convertfrom','datenum')];
+
+            thisDur = datetime(thisEdNum,'convertfrom','datenum') - datetime(thisStNum,'convertfrom','datenum');
+            encDur = [encDur;thisDur];
+
+            trackNum = [trackNum;str2double(tnum)];
+
 
         end
 
@@ -102,25 +128,45 @@ for j = 1:length(deps) % for each deployment
             
             myFile = dir([df(i).folder,'\',df(i).name,'\*brushDOA*.mat']); % load the folder name
             if ~isempty(myFile)
-                trackNum = extractAfter(myFile(1).folder,'cleaned_tracks\'); % grab the track num for naming later
+                tnum = extractAfter(myFile(1).folder,'cleaned_tracks\'); % grab the track num for naming later
                 load(fullfile([myFile(1).folder,'\',myFile(1).name])); % load the file
             else
                 myFile = dir([df(i).folder,'\',df(i).name,'\SOCAL*.mat']); % load the folder name
-                trackNum = extractAfter(myFile(1).folder,'cleaned_tracks\'); % grab the track num for naming later
+                tnum = extractAfter(myFile(1).folder,'cleaned_tracks\'); % grab the track num for naming later
                 load(fullfile([myFile(1).folder,'\',myFile(1).name])); % load the file
             end
 
             first = length(unique(DET{1,1}.Label));
             second = length(unique(DET{1,2}.Label));
-
             numWhales = [numWhales;max([first,second])];
+
+            first = DET{1,1}.TDet(1);
+            second = DET{1,2}.TDet(1);
+            thisStNum = min([first,second]);
+            StNum = [StNum; thisStNum];
+            StNumstr = [StNumstr; datetime(thisStNum,'convertfrom','datenum')];
+            first = DET{1,1}.TDet(end);
+            second = DET{1,2}.TDet(end);
+            thisEdNum = max([first,second]);
+            EdNum = [EdNum; thisEdNum];
+            EdNumstr = [EdNumstr; datetime(thisEdNum,'convertfrom','datenum')];
+
+            thisDur = datetime(thisEdNum,'convertfrom','datenum') - datetime(thisStNum,'convertfrom','datenum');
+            encDur = [encDur;thisDur];
+
+            trackNum = [trackNum;str2double(tnum)];
+
 
         end
 
 end
 
-totalWhales = sum(numWhales);
-3221-2738;
+cleanedTracksTable = table(StNumstr,EdNumstr,encDur,StNum,EdNum,trackNum,numWhales);
+writetable(cleanedTracksTable,'F:\Tracking\groups\siteN_cleanedTracksTable.csv');
+
+
+% totalWhales = sum(numWhales);
+% 3221-2738;
 
 %% compare to the original counts
 a = load('F:\Tracking\Erics_detector\SOCAL_H_72\group_size\cleanedTracksTable.mat');

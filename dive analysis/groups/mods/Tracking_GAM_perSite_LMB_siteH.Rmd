@@ -13,10 +13,8 @@ library(car)
 library(FSA)
 
 # read in data
-df = read.csv("F:/Tracking/groups/bigmodel/SOCAL_total_binned_groups.csv")
+df = read.csv("F:/Tracking/groups/SOCAL_H_binned_20min_groups_allVars.csv")
 
-# subset by site
-h = df[which(df$site=="H"),]
 ```
 
 Now, make a model per site!
@@ -25,14 +23,14 @@ Site H:
 ```{r site H autocorrelation}
 
 # make 0s Nas
-h[which(h$groupSize==0),4] = NA
+df[which(df$groupSize==0),4] = NA
 
 # check autocorrelation factor
-h$groupSize = as.numeric(h$groupSize)
+df$groupSize = as.numeric(df$groupSize)
 # make a histogram to show the distribution
-hist(h$groupSize)
+hist(df$groupSize)
 
-glmod1 = glm(h$groupSize~h$dayNight+h$jd,family=poisson)
+glmod1 = glm(df$groupSize~df$dayNight+df$jd,family=poisson)
 summary(glmod1)
 # check acf on the residuals
 all_acf = acf(residuals(glmod1),300)
@@ -44,12 +42,12 @@ all_acf$lag[idx]
 
 ```
 
-For site H, lag is 12. 11*25 = 300 minutes. Rebin and then continute on.
+For site H, lag is 6. 6*20 = 120 minutes. Rebin and then continute on.
 
 ```{r rebinned, echo=TRUE}
 # rebin to match the earlier lag value
 
-df = read.csv("F:/Tracking/groups/siteHmod/SOCAL_H_binned_300min_groups.csv")
+df = read.csv("F:/Tracking/groups/SOCAL_H_binned_120min_groups_allVars.csv")
 
 # replace zeros with Nas just to give it a go
 zeros = which(df$groupSize==0)
@@ -57,14 +55,14 @@ df$groupSize[zeros] = NA
 
 dfMod = df[-which(is.na(df$groupSize)),]
 dfMod$jd = as.numeric(dfMod$jd)
-dfMod$dayNight = as.factor(dfMod$dayNight)
+dfMod$dayNight = as.numeric(dfMod$dayNight)
 dfMod$presBins = as.numeric(dfMod$presBins)
 
 # check to see if anything is collinear
-lm1 = lm(groupSize~jd+presBins,data=dfMod)
+lm1 = lm(groupSize~jd+dayNight+presBins,data=dfMod)
 car::vif(lm1)
-#       jd presBins 
-# 1.000492 1.000492
+#       jd dayNight presBins 
+# 1.001754 1.004820 1.003216 
 # not collinear, move on
 
 # check whether presence bins should be linear or a smooth
@@ -84,11 +82,11 @@ shapiro.test(dfMod$groupSize)
 
 fullModel = gam(groupSize~
                   + s(dfMod$jd,bs='cc')
-                  + dayNight
+                  + s(dfMod$dayNight,bs='cc')
                   + presBins,
                 data=dfMod,family=tw(),method='REML')
 
-selectedCovariates = c("s(jd,bs='cc')", "dayNight","presBins")
+selectedCovariates = c("s(jd,bs='cc')", "s(dayNight,bs='cc')","presBins")
 namesCovariates = c("jd","daynight","pres")
 iVarList = 1:length(selectedCovariates)
 NVars = length(selectedCovariates)
@@ -123,10 +121,10 @@ for (x in 1: length (selectedCovariates)){
 }
 backSelection1[order(backSelection1[,3],decreasing=FALSE),]
 #      Removed         Idx Vars AIC               
-# [1,] "None excluded" "1 2 3"  "2342.21246115672"
-# [2,] "daynight"      "1 3"    "2346.76763386268"
-# [3,] "pres"          "1 2"    "2363.82655175548"
-# [4,] "jd"            "2 3"    "2375.16755655868"
+# [1,] "None excluded" "1 2 3"  "2017.77746750635"
+# [2,] "pres"          "1 2"    "2019.33382615557"
+# [3,] "daynight"      "1 3"    "2035.78868371433"
+# [4,] "jd"            "2 3"    "2050.47542410732"
 # lowest AIC was when none were removed, stop here
 
     
@@ -154,9 +152,9 @@ for (x in 1: length (selectedCovariates)){
 }
 fwdSelection1[order(fwdSelection1[,3],decreasing=FALSE),]
 #      Included   Idx Vars AIC               
-# [1,] "jd"       "1"      "2368.98082942756"
-# [2,] "pres"     "3"      "2378.67055866688"
-# [3,] "daynight" "2"      "2406.06141861393"
+# [1,] "jd"       "1"      "2037.9873911137" 
+# [2,] "daynight" "2"      "2054.05932638802"
+# [3,] "pres"     "3"      "2060.60856866564"
 # lowest AIC is jd, add this into the model and run again
 
 ## 2nd round
@@ -180,12 +178,12 @@ for (x in 1: length (selectedCovariates)){
 }
 fwdSelection2[order(fwdSelection2[,3],decreasing=FALSE),]
 #      Included      Idx Vars AIC               
-# [1,] "jd,pres"     "1 3"    "2346.76763386268"
-# [2,] "jd,daynight" "1 2"    "2363.82655175548"
-# jd and presence have lowest AIC, add both in and proceed
+# [1,] "jd,daynight" "1 2"    "2019.33382615557"
+# [2,] "jd,pres"     "1 3"    "2035.78868371433"
+# jd and dayNight have lowest AIC, add both in and proceed
 
 ## 3rd round
-varIncluded = c(1,3) # variable included from previous step
+varIncluded = c(1,2) # variable included from previous step
 fwdSelection3 = matrix(0, ncol=3, nrow=NVars-length(varIncluded))
 colnames(fwdSelection3) = c("Included","Idx Vars", "AIC")
 i = 1
@@ -204,7 +202,7 @@ for (x in 1: length (selectedCovariates)){
 }
 fwdSelection3[order(fwdSelection3[,3],decreasing=FALSE),]
 #           Included           Idx Vars                AIC 
-# "jd,daynight,pres"            "1 2 3" "2342.21246115672" 
+# "jd,daynight,pres"            "1 2 3" "2017.77746750635" 
 # model all variables is best, this aligns with the backwards selection!
 
 # run the model that is the best <3
@@ -212,7 +210,7 @@ fwdSelection3[order(fwdSelection3[,3],decreasing=FALSE),]
 # the full model has the lowest AIC
 bestModel = gam(groupSize~
                   + s(dfMod$jd,bs='cc')
-                  + dayNight
+                  + s(dfMod$dayNight,bs='cc')
                   + presBins,
                 data=dfMod,family=tw(),method='REML')
 summary(bestModel)
@@ -220,55 +218,48 @@ summary(bestModel)
 # Link function: log 
 # 
 # Formula:
-# groupSize ~ +s(dfMod$jd, bs = "cc") + dayNight + presBins
+# groupSize ~ +s(dfMod$jd, bs = "cc") + s(dfMod$dayNight, bs = "cc") + 
+#     presBins
 # 
 # Parametric coefficients:
-#              Estimate Std. Error t value Pr(>|t|)    
-# (Intercept) 0.8365432  0.0434733  19.243  < 2e-16 ***
-# dayNight1   0.1211224  0.0480138   2.523   0.0119 *  
-# presBins    0.0048214  0.0009505   5.073 5.16e-07 ***
+#             Estimate Std. Error t value Pr(>|t|)    
+# (Intercept) 0.822161   0.034260  23.998   <2e-16 ***
+# presBins    0.002949   0.001441   2.046   0.0412 *  
 # ---
 # Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 # 
 # Approximate significance of smooth terms:
-#               edf Ref.df     F p-value    
-# s(dfMod$jd) 5.443      8 5.279  <2e-16 ***
+#                     edf Ref.df     F  p-value    
+# s(dfMod$jd)       5.323      8 5.183  < 2e-16 ***
+# s(dfMod$dayNight) 2.792      8 2.514 3.27e-05 ***
 # ---
 # Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 # 
-# R-sq.(adj) =  0.101   Deviance explained = 11.6%
-# -REML = 1181.9  Scale est. = 0.36229   n = 642
+# R-sq.(adj) =  0.0768   Deviance explained = 10.1%
+# -REML = 1018.2  Scale est. = 0.35758   n = 607
+
+anova(bestModel)
+
+# Family: Tweedie(p=1.99) 
+# Link function: log 
+# 
+# Formula:
+# groupSize ~ +s(dfMod$jd, bs = "cc") + s(dfMod$dayNight, bs = "cc") + 
+#     presBins
+# 
+# Parametric Terms:
+#          df     F p-value
+# presBins  1 4.186  0.0412
+# 
+# Approximate significance of smooth terms:
+#                     edf Ref.df     F  p-value
+# s(dfMod$jd)       5.323  8.000 5.183  < 2e-16
+# s(dfMod$dayNight) 2.792  8.000 2.514 3.27e-05
+
 
 # make the plots
 plot(bestModel, all.terms=TRUE, shade = TRUE) #, residuals = F,
     # pch = 1, cex = 0.5, shift = coef(bestModel)[1])
 
 ```
-
- 
- 
- 
- 
-```{r kruskal-wallis test on diel pattern, echo=TRUE}
-# # run kruskal-wallis
-# # h0: there is no difference in group size per site
-# # h1: there is a difference in group size per site
-# # this should be significant based on our gam!
-# kruskal.test(groupSize~site, data=dfMod)
-# # 	Kruskal-Wallis rank sum test
-# # 
-# # data:  groupSize by site
-# # Kruskal-Wallis chi-squared = 51.992, df = 3, p-value = 3.007e-11
-# 
-# # now, a post-hoc test
-# dunnTest(groupSize~site, data=dfMod,
-#          method="bh")
-
-# E-H same
-# E-N different
-# H-N different
-# E-W same
-# H-W different
-# N-W different
-
-```
+These are some really exciting results! So group sizes are larger when we recorded more clicks, but this is barely significant. Some really clear seasonality here. Also a clear diel trend! Group sizes are larger at night for sure!

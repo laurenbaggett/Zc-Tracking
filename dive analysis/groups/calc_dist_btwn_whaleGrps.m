@@ -5,7 +5,7 @@
 % simultaneously
 % estimate from smoothed positions and then using the confidence intervals
 
-df = dir(['F:\Tracking\Erics_detector\SOCAL_W_04\cleaned_tracks\track*']); % directory of folders containing files
+df = dir(['F:\Tracking\Erics_detector\SOCAL_H_75\cleaned_tracks\track*']); % directory of folders containing files
 
 % initiate an array to hold mean values
 grpDistVals = [];
@@ -23,11 +23,13 @@ for i = 1:length(df) % for each track
     for b = 1:numel(whale) % remove any fields that are 0x0
         if height(whale{b}) < 3
             whale{b} = [];
+        elseif size(whale{b},2)<15
+            whale{b} = [];
         end
     end
     whale(cellfun('isempty',whale)) = []; % remove any empty fields
 
-    if length(whale) ~= 1 % if we have more than one whale
+    if length(whale) > 1 % if we have more than one whale
 
         % interpolate
         for wn = 1:numel(whale)
@@ -74,59 +76,13 @@ for i = 1:length(df) % for each track
 
             % remove early values
             tDiff = seconds(timePair(1,1) - timePair(1,2));
-            if tDiff > 0 % if the first value is later
-                idx = find(timePair(:,2)==timePair(1,1));
-                timePair(1:idx-1,2) = NaT;
-                xPair(1:idx-1,2) = NaN;
-                yPair(1:idx-1,2) = NaN;
-                zPair(1:idx-1,2) = NaN;
-            elseif tDiff < 0 % if the second value is later
-                idx = find(timePair(:,1)==timePair(1,2));
-                timePair(1:idx-1,1) = NaT;
-                xPair(1:idx-1,1) = NaN;
-                yPair(1:idx-1,1) = NaN;
-                zPair(1:idx-1,1) = NaN;
-            end
+            [~,isct1,isct2] = intersect(timePair(:,1),timePair(:,2));
 
-            % remove later values
-            trueEnd1 = rmmissing(timePair(:,1));
-            trueEnd2 = rmmissing(timePair(:,2));
-            tDiff2 = seconds(trueEnd1(end) - trueEnd2(end));
-            if tDiff2 > 0 % if the first value is later
-                idx = find(timePair(:,1)==trueEnd2(end));
-                timePair(idx+1:end,1) = NaT;
-                xPair(idx+1:end,1) = NaN;
-                yPair(idx+1:end,1) = NaN;
-                zPair(idx+1:end,1) = NaN;
-            elseif tDiff2 < 0 % if the second value is later
-                idx = find(timePair(:,2)==trueEnd1(end));
-                timePair(idx+1:end,2) = NaT;
-                xPair(idx+1:end,2) = NaN;
-                yPair(idx+1:end,2) = NaN;
-                zPair(idx+1:end,2) = NaN;
-            end
-
-            if ~isempty(idx) % if there is time overlap
-
-                % remove the NaNs and NaTs
-                timePair1 = rmmissing(timePair(:,1));
-                timePair2 = rmmissing(timePair(:,2));
-                timePair = horzcat(timePair1,timePair2);
-                xPair1 = rmmissing(xPair(:,1));
-                xPair1(xPair1==0) = [];
-                xPair2 = rmmissing(xPair(:,2));
-                xPair2(xPair2==0) = [];
-                xPair = horzcat(xPair1,xPair2);
-                yPair1 = rmmissing(yPair(:,1));
-                yPair1(yPair1==0) = [];
-                yPair2 = rmmissing(yPair(:,2));
-                yPair2(yPair2==0) = [];
-                yPair = horzcat(yPair1,yPair2);
-                zPair1 = rmmissing(zPair(:,1));
-                zPair1(zPair1==0) = [];
-                zPair2 = rmmissing(zPair(:,2));
-                zPair2(zPair2==0) = [];
-                zPair = horzcat(zPair1,zPair2);
+            if ~isempty(isct1)
+                timePair = [timePair(isct1,1), timePair(isct2,2)];
+                xPair = [x(isct1,1), x(isct2,2)];
+                yPair = [y(isct1,1), y(isct2,2)];
+                zPair = [z(isct1,1), z(isct2,2)];
 
                 % whew, okay after all of that we have the smoothed positions
                 % only at overlapping times between these pairs
@@ -153,7 +109,7 @@ for i = 1:length(df) % for each track
             % save these values for referencing later! only if there are
             % multiple whales in this encounter
             save([char(myFile.folder),'\',char(trackNum),'_distBtwnWhales.mat'],'encSep','mns','slope','labelstr'); % save the whale struct
-            
+
             % save min pairs dist, max pairs dist, number of whales in the
             % encounter
             minPair(i) = min(abs(cell2mat(mns)));
@@ -165,7 +121,7 @@ for i = 1:length(df) % for each track
             hold on
             for k = 1:length(encSep)
                 if height(encSep{k}) ~= 0
-                plot(encSep{k}(:,2),encSep{k}(:,1))
+                    plot(encSep{k}(:,2),encSep{k}(:,1))
                 end
             end
             datetick('x')
@@ -180,20 +136,19 @@ for i = 1:length(df) % for each track
             labs{i} = labelstr;
             grpDistSlopes{i} = slope;
 
-
         end % close if statement for encSep
-   
-    clear timePair; clear timePair1; clear timePair2
-    clear trueEnd1; clear trueEnd2; clear whale; clear whaleI
-    clear xPair; clear xPair1; clear xPair2; clear x
-    clear yPair; clear yPair1; clear yPair2; clear y
-    clear zPair; clear zPair1; clear zPair2; clear z
-    clear encSep; clear labelstr; clear b; clear mns; 
-    clear slope; close all
+
+        clear timePair; clear timePair1; clear timePair2
+        clear trueEnd1; clear trueEnd2; clear whale; clear whaleI
+        clear xPair; clear xPair1; clear xPair2; clear x
+        clear yPair; clear yPair1; clear yPair2; clear y
+        clear zPair; clear zPair1; clear zPair2; clear z
+        clear encSep; clear labelstr; clear b; clear mns;
+        clear slope; close all
 
     end % close if statement for multiple whales
 
 end % close for loop for each encounter
 
 % save('F:\Tracking\Erics_detector\SOCAL_W_04\deployment_stats\SOCAL_W_04_maxminPairs.mat', 'minPair','maxPair','numW');
-save('F:\Tracking\Erics_detector\SOCAL_W_04\deployment_stats\SOCAL_W_04_distBtwnGrps.mat','grpDistVals','grpDistMeans','grpDistSlopes','numW','labs');
+save('F:\Tracking\Erics_detector\SOCAL_H_75\deployment_stats\SOCAL_H_75_distBtwnGrps.mat','grpDistVals','grpDistMeans','grpDistSlopes','numW','labs');

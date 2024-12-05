@@ -1,0 +1,135 @@
+function [laneDist,laneMeans,laneMax,laneMin,labelstr,timeLag] = lane_dist(whale1,whale2,str)
+
+[idx, dst] = dsearchn(whale1.wlocSmooth,whale2.wlocSmooth);
+[closeDist, closeIdx] = min(dst);
+idx1 = idx(closeIdx);
+idx2 = closeIdx;
+
+whale1.TDet = datetime(whale1.TDet,'convertfrom','datenum');
+whale2.TDet = datetime(whale2.TDet,'convertfrom','datenum');
+
+% we have the indices of the closest points now!
+% calculate distance from that closest point to the edges of
+% each whale, regardless of time
+
+if idx1 < idx2 % if the first index is smaller
+    if idx1 ~= 1
+        for j = 1:idx1 % calculates from end to start
+            d1(j) = sqrt(((whale1.wlocSmooth(idx1-(j-1),1)-whale2.wlocSmooth(idx2-(j-1),1))^2) + ...
+                ((whale1.wlocSmooth(idx1-(j-1),2)-whale2.wlocSmooth(idx2-(j-1),2))^2) + ...
+                ((whale1.wlocSmooth(idx1-(j-1),3)-whale2.wlocSmooth(idx2-(j-1),3))^2));
+            t1(j) = (whale1.TDet(idx1-(j-1))-whale2.TDet(idx2-(j-1)));
+        end
+        d1 = flip(d1); % flip so we go from start to end
+        t1 = flip(t1);
+    end
+elseif idx2 < idx1 % if the second index is smaller
+    if idx2 ~= 1
+        for j = 1:idx2
+            d1(j) = sqrt(((whale1.wlocSmooth(idx1-(j-1),1)-whale2.wlocSmooth(idx2-(j-1),1))^2) + ...
+                ((whale1.wlocSmooth(idx1-(j-1),2)-whale2.wlocSmooth(idx2-(j-1),2))^2) + ...
+                ((whale1.wlocSmooth(idx1-(j-1),3)-whale2.wlocSmooth(idx2-(j-1),3))^2));
+            t1(j) = (whale1.TDet(idx1-(j-1))-whale2.TDet(idx2-(j-1)));
+        end
+        d1 = flip(d1); % flip so we go from start to end
+        t1 = flip(t1);
+    end
+elseif idx1 == idx2 % if indices are equal
+    if idx1 == length(whale1.wlocSmooth) && idx2 == length(whale2.wlocSmooth) % the indices are at the end of the track
+        for j = 1:idx1
+            d1(j) = sqrt(((whale1.wlocSmooth(j,1)-whale2.wlocSmooth(j,1))^2) + ...
+                ((whale1.wlocSmooth(j,2)-whale2.wlocSmooth(j,2))^2) + ...
+                ((whale1.wlocSmooth(j,3)-whale2.wlocSmooth(j,3))^2));
+            t1(j) = (whale1.TDet(j)-whale2.TDet(j));
+        end
+    end
+end
+
+% if the remaining length in whale 1 is less than in whale 2
+if length(whale1.wlocSmooth(idx1:end,1)) < length(whale2.wlocSmooth(idx2:end,1))
+    if length(whale1.wlocSmooth(idx1:end,1))-1 ~= 0 % if the idx isn't at the end already
+        for j = 1:length(whale1.wlocSmooth(idx1:end,1))-1 % go until the shorter end, minus one
+            d2(j) = sqrt(((whale1.wlocSmooth(idx1+(j),1)-whale2.wlocSmooth(idx2+(j),1))^2) + ...
+                ((whale1.wlocSmooth(idx1+(j),2)-whale2.wlocSmooth(idx2+(j),2))^2) + ...
+                ((whale1.wlocSmooth(idx1+(j),3)-whale2.wlocSmooth(idx2+(j),3))^2));
+            t2(j) = (whale1.TDet(idx1+(j))-whale2.TDet(idx2+(j)));
+        end
+    end
+elseif length(whale2.wlocSmooth(idx2:end,1)) < length(whale1.wlocSmooth(idx1:end,1))
+    if length(whale2.wlocSmooth(idx2:end,1))-1 ~= 0 % if the idx isn't at the end already
+        for j = 1:length(whale2.wlocSmooth(idx2:end,1))-1
+            d2(j) = sqrt(((whale1.wlocSmooth(idx1+(j),1)-whale2.wlocSmooth(idx2+(j),1))^2) + ...
+                ((whale1.wlocSmooth(idx1+(j),2)-whale2.wlocSmooth(idx2+(j),2))^2) + ...
+                ((whale1.wlocSmooth(idx1+(j),3)-whale2.wlocSmooth(idx2+(j),3))^2));
+            t2(j) = (whale1.TDet(idx1+(j))-whale2.TDet(idx2+(j)));
+        end
+    end
+end
+
+if idx1 == 1 && idx2 == size(whale2.wlocSmooth,1) % if the first index is the start of the first whale and the second is the end of the second whale
+    if idx2 < length(whale1.wlocSmooth)
+        for j = 1:idx2
+            d1(j) = sqrt(((whale1.wlocSmooth(idx1+(j-1),1)-whale2.wlocSmooth(idx2-(j-1),1))^2) + ...
+                ((whale1.wlocSmooth(idx1+(j-1),2)-whale2.wlocSmooth(idx2-(j-1),2))^2) + ...
+                ((whale1.wlocSmooth(idx1+(j-1),3)-whale2.wlocSmooth(idx2-(j-1),3))^2));
+            t1(j) = (whale1.TDet(idx1+(j-1))-whale2.TDet(idx2-(j-1)));
+        end
+    elseif idx2 > length(whale1.wlocSmooth)
+        for j = 1:size(whale1.wlocSmooth,1)
+            d1(j) = sqrt(((whale1.wlocSmooth(idx1+(j-1),1)-whale2.wlocSmooth(idx2-(j-1),1))^2) + ...
+                ((whale1.wlocSmooth(idx1+(j-1),2)-whale2.wlocSmooth(idx2-(j-1),2))^2) + ...
+                ((whale1.wlocSmooth(idx1+(j-1),3)-whale2.wlocSmooth(idx2-(j-1),3))^2));
+            t1(j) = (whale1.TDet(idx1+(j-1))-whale2.TDet(idx2-(j-1)));
+        end
+    end
+elseif idx2==1 && idx1==length(whale1.wlocSmooth) % if the second index is the start and the first is the end
+    if idx1 < length(whale2.wlocSmooth)
+        for j = 1:idx1
+            d1(j) = sqrt(((whale1.wlocSmooth(idx1-(j-1),1)-whale2.wlocSmooth(idx2+(j-1),1))^2) + ...
+                ((whale1.wlocSmooth(idx1-(j-1),2)-whale2.wlocSmooth(idx2+(j-1),1))^2) + ...
+                ((whale1.wlocSmooth(idx1-(j-1),3)-whale2.wlocSmooth(idx2+(j-1),1))^2));
+            t1(j) = (whale1.TDet(idx1-(j-1))-whale2.TDet(idx2+(j-1)));
+        end
+    elseif idx1 > length(whale2.wlocSmooth)
+        for j = 1:size(whale2.wlocSmooth,1)
+            d1(j) = sqrt(((whale1.wlocSmooth(idx1-(j-1),1)-whale2.wlocSmooth(idx2+(j-1),1))^2) + ...
+                ((whale1.wlocSmooth(idx1-(j-1),2)-whale2.wlocSmooth(idx2+(j-1),1))^2) + ...
+                ((whale1.wlocSmooth(idx1-(j-1),3)-whale2.wlocSmooth(idx2+(j-1),1))^2));
+            t1(j) = (whale1.TDet(idx1-(j-1))-whale2.TDet(idx2+(j-1)));
+        end
+    end
+end
+
+if exist('d1','var') && exist('d2','var')
+    laneDist = horzcat(d1,d2)'; % save the lane distance values for this pair
+    times = horzcat(t1,t2)';
+elseif exist('d1','var') && ~exist('d2','var')
+    laneDist = d1'; % save the lane distance values for this pair
+    times = t1';
+elseif exist('d2','var') && ~exist('d1','var')
+    laneDist = d2'; % save the lane distance values for this pair
+    times = t2';
+end
+
+% % fit a line
+% mdl = polyfit(1:length(laneDist{n}),laneDist{n},1);
+
+if exist('laneDist','var')
+
+    labelstr = {['whale pair ', num2str(str)]};
+    laneMeans = nanmean(laneDist);
+    laneMax = nanmax(laneDist);
+    laneMin = nanmin(laneDist);
+    timeLag = times;
+
+else
+    labelstr = [];
+    laneMeans = [];
+    laneMax = [];
+    laneMin = [];
+    timeLag = [];
+    laneDist = [];
+
+end
+
+end

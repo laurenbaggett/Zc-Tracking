@@ -30,7 +30,7 @@ if time(end) > sunset
         datestr(time(end)), datestr(sunset));
 end
 
-parfor i = 1:N
+for i = 1:N
     event = time(i);
     if sum(event >= sunrise & event < sunset)
        % day time, convert to normalized day 

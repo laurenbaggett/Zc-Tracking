@@ -8,9 +8,9 @@ xline = [-4000:100:4000]; % x limits, 1000 m bins
 yline = [-4000:100:4000]'; % y limits 1000 m bins
 grdf = zeros(length(xline),length(yline)); % final gridded zeros, initialized
 
-% dfList = {'SOCAL_N_68'};
+dfList = {'SOCAL_N_68'};
 % dfList = {'SOCAL_H_72','SOCAL_H_73','SOCAL_H_74','SOCAL_H_75'};
-dfList = {'SOCAL_W_01','SOCAL_W_02','SOCAL_W_03','SOCAL_W_04', 'SOCAL_W_05'};
+% dfList = {'SOCAL_W_01','SOCAL_W_02','SOCAL_W_03','SOCAL_W_04', 'SOCAL_W_05'};
 % dfList = {'SOCAL_E_63'};
 % dfList = {'SOCAL_H_74'};
 
@@ -99,14 +99,14 @@ end % for each deployment
 % load bathymetry
 load('F:\Tracking\bathymetry\socal2');
 
-% W 01
-load('F:\Tracking\Instrument_Orientation\SOCAL_W_01\SOCAL_W_01_WE\dep\SOCAL_W_01_WE_harp4chPar');
-hydLoc{1} = recLoc;
-clear recLoc
-load('F:\Tracking\Instrument_Orientation\SOCAL_W_01\SOCAL_W_01_WS\dep\SOCAL_W_01_WS_harp4chPar');
-hydLoc{2} = recLoc;
-h0 = mean([hydLoc{1}; hydLoc{2}]);
-hydLoc{3} = [33.53973  -120.25815 -1377.8741];
+% % W 01
+% load('F:\Tracking\Instrument_Orientation\SOCAL_W_01\SOCAL_W_01_WE\dep\SOCAL_W_01_WE_harp4chPar');
+% hydLoc{1} = recLoc;
+% clear recLoc
+% load('F:\Tracking\Instrument_Orientation\SOCAL_W_01\SOCAL_W_01_WS\dep\SOCAL_W_01_WS_harp4chPar');
+% hydLoc{2} = recLoc;
+% h0 = mean([hydLoc{1}; hydLoc{2}]);
+% hydLoc{3} = [33.53973  -120.25815 -1377.8741];
 
 % % H 75
 % load('F:\Tracking\Instrument_Orientation\SOCAL_H_75\SOCAL_H_75_HS\rec\SOCAL_H_75_HS_harp4chPar');
@@ -117,14 +117,14 @@ hydLoc{3} = [33.53973  -120.25815 -1377.8741];
 % h0 = mean([hydLoc{1}; hydLoc{2}]);
 % hydLoc{3} = [32.86216  -119.13519 -1284.5215];
 
-% % N 68
-% load('F:\Tracking\Instrument_Orientation\SOCAL_N_68\SOCAL_N_68_NS\dep\SOCAL_N_68_NS_harp4chParams');
-% hydLoc{1} = recLoc;
-% clear recLoc
-% load('F:\Tracking\Instrument_Orientation\SOCAL_N_68\SOCAL_N_68_NW\dep\SOCAL_N_68_NW_harp4chParams');
-% hydLoc{2} = recLoc;
-% h0 = mean([hydLoc{1}; hydLoc{2}]);
-% hydLoc{3} = [32.36975  -118.56458 -1298.3579];
+% N 68
+load('F:\Tracking\Instrument_Orientation\SOCAL_N_68\SOCAL_N_68_NS\dep\SOCAL_N_68_NS_harp4chParams');
+hydLoc{1} = recLoc;
+clear recLoc
+load('F:\Tracking\Instrument_Orientation\SOCAL_N_68\SOCAL_N_68_NW\dep\SOCAL_N_68_NW_harp4chParams');
+hydLoc{2} = recLoc;
+h0 = mean([hydLoc{1}; hydLoc{2}]);
+hydLoc{3} = [32.36975  -118.56458 -1298.3579];
 
 % % E 63
 % hydLoc{2} = [32.65871  -119.47711 -1325.5285]; % EE
@@ -173,10 +173,10 @@ contour(x(Ix), y(Iy), Z(Iy,Ix),'black','showtext','on')
 caxis(cRange)
 % caxis([0 1])
 set(gca,'YDir','normal')
-plot(h1(1),h1(2),'s','markeredgecolor','white','markerfacecolor',[0.8 0.8 0.8],'markersize',6);
-plot(h2(1),h2(2),'s','markeredgecolor','white','markerfacecolor',[0.8 0.8 0.8],'markersize',6);
-plot(h3(1),h3(2),'o','markeredgecolor','white','markerfacecolor',[0.8 0.8 0.8],'markersize',6);
-title('Site W')
+plot(h1(1),h1(2),'s','markeredgecolor','white','markerfacecolor',[0 0 0],'markersize',6);
+plot(h2(1),h2(2),'s','markeredgecolor','white','markerfacecolor',[0 0 0],'markersize',6);
+% plot(h3(1),h3(2),'o','markeredgecolor','white','markerfacecolor',[0.8 0.8 0.8],'markersize',6);
+title('Site N')
 
 %% normalize by detection probability
 load('F:\Zc_Analysis\tracking_figures\track_density\SOCAL_E_63_detectionProbability.mat')
