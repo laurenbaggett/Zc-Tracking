@@ -543,16 +543,10 @@ end
 
 %% combine both
 
-breaks = 1:50:5000;
+breaks = 1:10:5000;
 figure
-tiledlayout(1,2,'tilespacing','compact')
-nexttile
-histogram(laneDist,breaks,'normalization','probability')
+histogram(allMeans,breaks,'normalization','')
 hold on
-histogram(allMeans,breaks,'normalization','probability')
-legend({'Lane Distance (Mean)','Pairs Distance (Mean)'})
-xlabel('Mean Distance (m)')
-ylabel('Probability')
-nexttile
-histogram(timeLag,tbreaks,'normalization','probability','facecolor',[0.8500 0.3250 0.0980])
-xlabel('Time Lag (hh:mm:ss)')
+histogram(laneDist,breaks)
+legend({'Pairs Distance (Mean)','Lane Distance (Mean)'})
+
