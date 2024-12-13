@@ -45,15 +45,18 @@ for j = 1:length(deps) % for each deployment
 end
 
 totalWhales = sum(numWhales);
+tbins = duration('00:00:00'):minutes(1):duration('02:00:00');
 
 figure
-subplot(1,2,1)
-histogram(trackDur)
+subplot(2,1,1)
+histogram(trackDur,tbins,'edgecolor',[0.1 0.5470 0.8410])
 title('Track Durations')
 xlim([duration(0,0,0) duration(2,0,0)])
-subplot(1,2,2)
-histogram(encDur)
+xlabel('hh:mm:ss')
+subplot(2,1,2)
+histogram(encDur,tbins,'facecolor',[0.8500 0.3250 0.0980],'edgecolor',[0.9500 0.4250 0.1980])
 title('Encounter Durations')
+xlabel('hh:mm:ss')
 
 nanmedian(trackDur)
 nanmean(trackDur)

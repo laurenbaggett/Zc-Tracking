@@ -101,7 +101,7 @@ dunnTest(median~site, data=data,
          method="bh")
 
 # Dunn (1964) Kruskal-Wallis multiple comparison
-# p-values adjusted with the Benjamini-Hochberg method.
+# p-values adjusted with the Benjamin-Hochberg method.
 # 
 # Comparison           Z      P.unadj        P.adj
 # 1      E - H -17.1883339 3.247308e-66 1.948385e-65

@@ -12,14 +12,14 @@
 load('F:\Tracking\bathymetry\socal2');
 
 % load receiver positions
-% % N_68
-% hydLoc{3} = [32.36975  -118.56458 -1298.3579]; % single channel
-% hydLoc{1} = [32.36492  -118.56841 -1338.4203]; % NS
-% hydLoc{2} = [32.36975  -118.57225 -1343.4238]; % NW
-% E_63
-hydLoc{3} = [32.65345  -119.48455  -1328.9836]; % ES (1ch)
-hydLoc{1} = [32.65871  -119.47711  -1325.5285]; % EE (4ch)
-hydLoc{2} = [32.65646  -119.48815  -1330.1631]; % EW (4ch)
+% N_68
+hydLoc{3} = [32.36975  -118.56458 -1298.3579]; % single channel
+hydLoc{1} = [32.36492  -118.56841 -1338.4203]; % NS
+hydLoc{2} = [32.36975  -118.57225 -1343.4238]; % NW
+% % E_63
+% hydLoc{3} = [32.65345  -119.48455  -1328.9836]; % ES (1ch)
+% hydLoc{1} = [32.65871  -119.47711  -1325.5285]; % EE (4ch)
+% hydLoc{2} = [32.65646  -119.48815  -1330.1631]; % EW (4ch)
 
 % convert hydrophone locations to meters:
 h0 = mean([hydLoc{1}; hydLoc{2}]);
@@ -37,7 +37,7 @@ h2(3) = abs(h0(3))-abs(hydLoc{2}(3));
 h3(3) = abs(h0(3))-abs(hydLoc{3}(3));
 
 % convert lat lon to meters, from Eric
-plotAx = [-1000, 1000, -1000, 1000];
+plotAx = [-2000, 2000, -2000, 2000];
 [x,~] = latlon2xy_wgs84(h0(1).*ones(size(X)), X, h0(1), h0(2));
 [~,y] = latlon2xy_wgs84(Y, h0(2).*ones(size(Y)), h0(1), h0(2));
 Ix = find(x>=plotAx(1)-100 & x<=plotAx(2)+100);
@@ -62,7 +62,7 @@ h(3) = plot(h3(1),h3(2),'o','markeredgecolor','black','markerfacecolor','#FF1F5B
 plot([h1(1) h2(1)], [h1(2) h2(2)],'--','color','#FF1F5B')
 plot([h2(1) h3(1)], [h2(2) h3(2)],'--','color','#FF1F5B')
 plot([h1(1) h3(1)], [h1(2) h3(2)],'--','color','#FF1F5B')
-h(4) = plot(NaN,NaN,'-','color','#FF1F5B','linewidth',8,'displayname','E63');
+h(4) = plot(NaN,NaN,'-','color','#FF1F5B','linewidth',8,'displayname','N68');
 h(5) = plot(NaN,NaN,'s','markeredgecolor','black','markerfacecolor','white','markersize',12,'displayname','4-Channel');
 h(6) = plot(NaN,NaN,'o','markeredgecolor','black','markerfacecolor','white','markersize',8,'displayname','1-Channel');
 legend(h(4:6))
@@ -134,7 +134,7 @@ h3_5(3) = abs(h0(3))-abs(hydLoc5{3}(3));
 
 
 % convert lat lon to meters, from Eric
-plotAx = [-1000, 1000, -700, 1300];
+plotAx = [-2000, 2000, -2000, 2000];
 [x,~] = latlon2xy_wgs84(h0(1).*ones(size(X)), X, h0(1), h0(2));
 [~,y] = latlon2xy_wgs84(Y, h0(2).*ones(size(Y)), h0(1), h0(2));
 Ix = find(x>=plotAx(1)-100 & x<=plotAx(2)+100);
@@ -239,7 +239,7 @@ h3_4(3) = abs(h0(3))-abs(hydLoc4{3}(3));
 
 
 % convert lat lon to meters, from Eric
-plotAx = [-800, 1200, -800, 1200];
+plotAx = [-2000, 2000, -2000, 2000];
 [x,~] = latlon2xy_wgs84(h0(1).*ones(size(X)), X, h0(1), h0(2));
 [~,y] = latlon2xy_wgs84(Y, h0(2).*ones(size(Y)), h0(1), h0(2));
 Ix = find(x>=plotAx(1)-100 & x<=plotAx(2)+100);

@@ -89,10 +89,6 @@ for j = 1:length(deps)
     end % close loop for each track
 
     % add in some code here that will save a summary per deployment, allow
-    % for subsequent code that will estimate the number of subgroups per
-    % deployment
-
-    % hypothesis that these whales are often subgrouping, but our recording
-    % radius is too small to find all the subgroups
+    % for subsequen
 
 end % close loop for each deployment
