@@ -66,7 +66,9 @@ for j = 1:length(deps)
                     end
                 end
 
-                if any(distances)>1000 % more than 1 km mean separation
+                labelstr(cellfun('isempty',labelstr)) = []; % remove any empty fields
+
+                if any(distances>1000) % more than 1 km mean separation
 
                     aboveth = find(distances > 1000); % find which pairs are above the threshold
 
@@ -84,11 +86,31 @@ for j = 1:length(deps)
 
         if size(subgroup,1)>0
             save([myFile.folder,'\',trackNum,'_subgroup.mat'],'subgroup'); % save the subgroup table
+
+            % do some organization of these subgroups
+            % find the total number of whales
+            % find
+
+
+
+
+
         end
 
     end % close loop for each track
 
     % add in some code here that will save a summary per deployment, allow
-    % for subsequen
+    % for subsequent code that will estimate the number of subgroups per
+    % deployment
+
+    % hypothesis that these whales are often subgrouping, but our recording
+    % radius is too small to find all the subgroups
 
 end % close loop for each deployment
+
+%% compile
+% now that we've defined subgroups, go back in and do some thinking about
+% this
+
+% hopefully those subgroups are straightforward to define
+

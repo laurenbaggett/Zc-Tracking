@@ -5,7 +5,7 @@
 % simultaneously
 % estimate from smoothed positions and then using the confidence intervals
 
-df = dir(['F:\Tracking\Erics_detector\SOCAL_H_75\cleaned_tracks\track*']); % directory of folders containing files
+df = dir(['F:\Tracking\Erics_detector\SOCAL_W_01\cleaned_tracks\track*']); % directory of folders containing files
 
 % initiate an array to hold mean values
 grpDistVals = [];
@@ -151,4 +151,4 @@ for i = 1:length(df) % for each track
 end % close for loop for each encounter
 
 % save('F:\Tracking\Erics_detector\SOCAL_W_04\deployment_stats\SOCAL_W_04_maxminPairs.mat', 'minPair','maxPair','numW');
-save('F:\Tracking\Erics_detector\SOCAL_H_75\deployment_stats\SOCAL_H_75_distBtwnGrps.mat','grpDistVals','grpDistMeans','grpDistSlopes','numW','labs');
+% save('F:\Tracking\Erics_detector\SOCAL_H_75\deployment_stats\SOCAL_H_75_distBtwnGrps.mat','grpDistVals','grpDistMeans','grpDistSlopes','numW','labs');

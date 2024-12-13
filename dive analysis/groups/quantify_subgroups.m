@@ -5,6 +5,8 @@ deps = {'SOCAL_W_01','SOCAL_W_02','SOCAL_W_03','SOCAL_W_04','SOCAL_W_05', ...
     'SOCAL_E_63','SOCAL_N_68',...
     'SOCAL_H_72','SOCAL_H_73','SOCAL_H_74','SOCAL_H_75'};
 
+totalSubgroups = [];
+
 for j = 1:length(deps)
 
     df = dir(['F:\Tracking\Erics_detector\',deps{j},'\cleaned_tracks\track*']); % directory of folders containing files
@@ -66,7 +68,9 @@ for j = 1:length(deps)
                     end
                 end
 
-                if any(distances)>1000 % more than 1 km mean separation
+                labelstr(cellfun('isempty',labelstr)) = []; % remove any empty fields
+
+                if any(distances>1000) % more than 1 km mean separation
 
                     aboveth = find(distances > 1000); % find which pairs are above the threshold
 
@@ -84,6 +88,8 @@ for j = 1:length(deps)
 
         if size(subgroup,1)>0
             save([myFile.folder,'\',trackNum,'_subgroup.mat'],'subgroup'); % save the subgroup table
+            subgroup2 = table(subgroup.Var1,subgroup.Var2,subgroup.Var3,repmat({trackNum},size(subgroup,1),1),repmat({deps{j}},size(subgroup,1),1));
+            totalSubgroups = [totalSubgroups;subgroup2]; % save to master table
         end
 
     end % close loop for each track
@@ -96,3 +102,10 @@ for j = 1:length(deps)
     % radius is too small to find all the subgroups
 
 end % close loop for each deployment
+
+%% compile
+% now that we've defined subgroups, go back in and do some thinking about
+% this
+
+% hopefully those subgroups are straightforward to define
+
