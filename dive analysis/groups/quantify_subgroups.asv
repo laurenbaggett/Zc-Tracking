@@ -257,18 +257,17 @@ nexttile
 % subplot(1,2,1)
 h = imagesc(edges{1},edges{2},n)
 set(h,'alphadata',n>0)
-c = colorbar
+colorbar
 colormap(cmap)
 xlabel('Total # Whales per Encounter')
 ylabel('# of Subgroups')
-ylabel(c,'Counts')
 yticks([1:1:6])
 % subplot(1,2,2)
 nexttile
 histogram(subgroups(:,3),[1:1:6],'facecolor',cmap(60,:))
 xticks([1:1:6])
 xlabel('Mean # Whales per Subgroup')
-ylabel('Frequency')
+ylabel('Counts')
 
 
 [n,edges] = hist3(subgroups(:,2:3),{1:1:10 1:1:10});
