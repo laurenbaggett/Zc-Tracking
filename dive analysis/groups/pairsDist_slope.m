@@ -116,37 +116,6 @@ xlim([0 4000])
 df = table(allMeans,allSlp,allSite);
 writetable(df,'F:\Zc_Analysis\dist_btwn_pairs\dist_btwn_pairs_allsites.csv');
 
-%% simulate some fake data for plotting visualization purposes
-allSite = allSite(~isnan(allSlp));
-allSlp = rmmissing(allSlp);
-allMeans = rmmissing(allMeans);
-
-simMeans = allMeans-500;
-simMeans(simMeans<0) = 0;
-
-randSecs = normrnd(120,30,218,1);
-
-figure
-tiledlayout(1,2)
-nexttile
-histogram(allMeans)
-hold on
-histogram(simMeans)
-xlabel('Distance (m)')
-legend('Track Distance','Lane Distance')
-nexttile
-histogram(randSecs)
-xlabel('Time Lag (s)')
-
-figure
-tiledlayout(1,2)
-nexttile
-boxplot([allMeans, simMeans])
-xlabel('Track Dist    Lane Dist')
-nexttile
-histogram(randSecs)
-xlabel('Time Lag (s)')
-
 %% by site
 
 deps = {'SOCAL_H_72','SOCAL_H_73','SOCAL_H_74','SOCAL_H_75',...
@@ -542,17 +511,18 @@ for i = 1:length(siteDist)
 end
 
 %% combine both
+cmap = cmocean('dense');
 
 breaks = 1:50:5000;
 figure
 tiledlayout(1,2,'tilespacing','compact')
 nexttile
-histogram(laneDist,breaks,'normalization','probability')
+histogram(laneDist,breaks,'normalization','probability','edgecolor','none','facecolor',cmap(50,:))
 hold on
-histogram(allMeans,breaks,'normalization','probability')
-legend({'Lane Distance (Mean)','Pairs Distance (Mean)'})
+histogram(allMeans,breaks,'normalization','probability','edgecolor','none','facecolor',cmap(200,:))
+legend({'Lane Distance','Pairs Distance'})
 xlabel('Mean Distance (m)')
 ylabel('Probability')
 nexttile
-histogram(timeLag,tbreaks,'normalization','probability','facecolor',[0.8500 0.3250 0.0980])
+histogram(timeLag,tbreaks,'normalization','probability','facecolor',cmap(50,:),'edgecolor','none','facealpha',1)
 xlabel('Time Lag (hh:mm:ss)')

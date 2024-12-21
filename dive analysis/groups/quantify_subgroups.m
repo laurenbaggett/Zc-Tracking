@@ -138,8 +138,8 @@ figure
 tiledlayout(1,2,'tilespacing','compact')
 nexttile
 % subplot(1,2,1)
-h = imagesc(edges{1},edges{2},n)
-set(h,'alphadata',n>0)
+h = imagesc(n')
+set(h,'alphadata',n'>0)
 c = colorbar
 colormap(cmap)
 xlabel('Total # Whales per Encounter')
@@ -154,7 +154,7 @@ xlabel('Mean # Whales per Subgroup')
 ylabel('Frequency')
 
 
-[n,edges] = hist3(subgroups(:,2:3),{1:1:10 1:1:10});
+[n,edges] = hist3(subgroups(:,2:3),{1:1:6 1:1:10});
 cmap = cmocean('dense');
 
 figure
@@ -163,6 +163,7 @@ colorbar
 colormap(cmap)
 ylabel('# subgroups')
 xlabel('mean # whales/subgroup')
+yticks([1:1:6])
 
 figure
 histogram(subgroups(:,3))
