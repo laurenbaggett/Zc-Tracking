@@ -263,8 +263,8 @@ for itr_n = 1:n  % number of simulations loop
     y = rho.*sin(theta) - y2;
     % move these to reference an absolute centerpoint that's constant
     % between deployments
-    % x = x + absolute(1);
-    % y = y + absolute(2);
+    x = x + absolute(1);
+    y = y + absolute(2);
     
     % to plot a birdseye view of what was heard and
     % what wasn't:
