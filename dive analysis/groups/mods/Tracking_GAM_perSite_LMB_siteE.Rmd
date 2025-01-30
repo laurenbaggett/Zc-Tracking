@@ -240,6 +240,6 @@ summary(bestModel)
 # -REML = 625.14  Scale est. = 0.2688    n = 388
 
 # make the plots
-plot(bestModel, all.terms=TRUE, shade=TRUE)
+plot(bestModel, all.terms=TRUE, shade=TRUE,y = )
 
 ```

@@ -7,6 +7,7 @@ function [sumsim,sumdet,fprob,xline,yline,xdetall,ydetall] = ...
     directivity,minAmpSide_mean, ...
     minAmpBack_mean,botAngle_std,descentPerc, ...
     binVec,n,N,maxRange,thresh,RLbins,offset,grid,absolute)
+
 %Based on Kait Frasier ClickMethod
 % JAH made function 6-2022
 % global p
@@ -323,13 +324,13 @@ sumsim = sum(grdsimall,3);
 sumdet = sum(grddetall,3);
 fprob = sumdet./sumsim;
 
-figure(215)
-imagesc(xline,yline,fprob)
-colormap(hot)
-colorbar
-set(gca,'YDir','normal')
-hold on
-plot(offset(1,1),offset(1,2),'s','markeredgecolor','white','markerfacecolor',[0.6 0.6 0.6],'markersize',6);
-plot(offset(2,1),offset(2,2),'s','markeredgecolor','white','markerfacecolor',[0.6 0.6 0.6],'markersize',6);
+% figure(215)
+% imagesc(xline,yline,fprob)
+% colormap(hot)
+% colorbar
+% set(gca,'YDir','normal')
+% hold on
+% plot(offset(1,1),offset(1,2),'s','markeredgecolor','white','markerfacecolor',[0.6 0.6 0.6],'markersize',6);
+% plot(offset(2,1),offset(2,2),'s','markeredgecolor','white','markerfacecolor',[0.6 0.6 0.6],'markersize',6);
 
 

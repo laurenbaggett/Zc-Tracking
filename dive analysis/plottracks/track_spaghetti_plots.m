@@ -36,7 +36,7 @@ global brushing
 loadParams(paramFile)
 
 % convert lat lon to meters, from Eric
-plotAx = [-4000, 4000, -4000, 4000];
+plotAx = [-4500, 4500, -4500, 4500];
 [x,~] = latlon2xy_wgs84(h0(1).*ones(size(X)), X, h0(1), h0(2));
 [~,y] = latlon2xy_wgs84(Y, h0(2).*ones(size(Y)), h0(1), h0(2));
 Ix = find(x>=plotAx(1)-100 & x<=plotAx(2)+100);
@@ -68,7 +68,7 @@ for i = 1:length(df)
                 nTime = [nTime;etime(n)/etime(end)];
             end
             % plot(whale{wn}.wlocSmooth(:,2),whale{wn}.wlocSmooth(:,1),'linewidth',3)
-            patch([whale{1,wn}.wlocSmooth(:,2);nan], [whale{1,wn}.wlocSmooth(:,1);nan],[nTime;nan],'facecolor','none','edgecolor','interp','linewidth',1.5)
+            patch([whale{1,wn}.wlocSmooth(:,1);nan], [whale{1,wn}.wlocSmooth(:,2);nan],[nTime;nan],'facecolor','none','edgecolor','interp','linewidth',1.5)
             end
         end
     end
@@ -146,7 +146,7 @@ global brushing
 loadParams(paramFile)
 
 % convert lat lon to meters, from Eric
-plotAx = [-4000, 4000, -4000, 4000];
+plotAx = [-4500, 4500, -4500, 4500];
 [x,~] = latlon2xy_wgs84(h0(1).*ones(size(X)), X, h0(1), h0(2));
 [~,y] = latlon2xy_wgs84(Y, h0(2).*ones(size(Y)), h0(1), h0(2));
 Ix = find(x>=plotAx(1)-100 & x<=plotAx(2)+100);
@@ -174,7 +174,6 @@ for i = 1:length(df)
             for n = 1:length(etime)
                 nTime = [nTime;etime(n)/etime(end)];
             end
-            % plot(whale{wn}.wlocSmooth(:,2),whale{wn}.wlocSmooth(:,1),'linewidth',3)
             patch([whale{1,wn}.wlocSmooth(:,1);nan], [whale{1,wn}.wlocSmooth(:,2);nan],[nTime;nan],'facecolor','none','edgecolor','interp','linewidth',1.5)
         end
     end
@@ -219,6 +218,43 @@ ylim([-1500 0])
 xlim([0 3000])
 % colorbar
 
+% % plot lat/lon for sanity
+% cmap = flipud(cmocean('dense'));
+% cmap = cmap(20:250,:);
+% 
+% figure
+% % contour(x(Ix), y(Iy), Z(Iy,Ix),'black','showtext','on')
+% hold on
+% colormap(cmap)
+% for i = 1:length(df)
+%     myFile = dir([df(i).folder,'\',df(i).name,'\*whale.mat']); % load the folder name
+%     load(fullfile([myFile(1).folder,'\',myFile(1).name])); % load the file
+%     for wn = 1:length(whale)
+%         if size(whale{wn},2)>14
+%             etime = []; % preallocate
+%             for t = 1:length(whale{wn}.TDet) % for each timestamp
+%                 etime = [etime;(whale{wn}.TDet(t)-whale{wn}.TDet(1))*spd];
+%                 etime = etime;
+%             end
+%             % calculate normalized time for the track
+%             nTime = [];
+%             for n = 1:length(etime)
+%                 nTime = [nTime;etime(n)/etime(end)];
+%             end
+%             % plot(whale{wn}.wlocSmooth(:,2),whale{wn}.wlocSmooth(:,1),'linewidth',3)
+%             patch([whale{1,wn}.LatLonDepth(:,2);nan], [whale{1,wn}.LatLonDepth(:,1);nan],[nTime;nan],'facecolor','none','edgecolor','interp','linewidth',1.5)
+%         end
+%     end
+% end
+% caxis([0 1])
+% % colorbar()
+% % plot(h1(1),h1(2),'s','markeredgecolor','black','markerfacecolor','black','markersize',6);
+% % plot(h2(1),h2(2),'s','markeredgecolor','black','markerfacecolor','black','markersize',6);
+% % plot(h3(1),h3(2),'o','markeredgecolor','black','markerfacecolor','black','markersize',6);
+% % set(gca,'XDir','reverse')
+% % camroll(-90)
+% axis equal
+
 %% site H
 
 % need to plot per deployment, add the appropriate offset for each
@@ -248,7 +284,7 @@ h3(3) = abs(h0(3))-abs(hydLoc{3}(3));
 deps = {'SOCAL_H_72','SOCAL_H_73','SOCAL_H_74','SOCAL_H_75'};
 
 % convert lat lon to meters, from Eric
-plotAx = [-4000, 4000, -4000, 4000];
+plotAx = [-4500, 4500, -4500, 4500];
 [x,~] = latlon2xy_wgs84(h0(1).*ones(size(X)), X, h0(1), h0(2));
 [~,y] = latlon2xy_wgs84(Y, h0(2).*ones(size(Y)), h0(1), h0(2));
 Ix = find(x>=plotAx(1)-100 & x<=plotAx(2)+100);
@@ -308,16 +344,16 @@ for j = 1:length(deps)
                     nTime = [nTime;etime(n)/etime(end)];
                 end
                 % plot(whale{wn}.wlocSmooth(:,2),whale{wn}.wlocSmooth(:,1),'linewidth',3)
-                patch([whale{1,wn}.wlocSmooth(:,2)+offset(2);nan], [whale{1,wn}.wlocSmooth(:,1)+offset(1);nan],[nTime;nan],'facecolor','none','edgecolor','interp','linewidth',1.5)
+                patch([whale{1,wn}.wlocSmooth(:,1)+offset(1);nan], [whale{1,wn}.wlocSmooth(:,2)+offset(2);nan],[nTime;nan],'facecolor','none','edgecolor','interp','linewidth',1.5)
             end
         end
     end
 end
 caxis([0 1])
 % colorbar()
-plot(h1(1),h1(2),'s','markeredgecolor','black','markerfacecolor',[0.7 0.7 0.7],'markersize',6);
-plot(h2(1),h2(2),'s','markeredgecolor','black','markerfacecolor',[0.7 0.7 0.7],'markersize',6);
-plot(h3(1),h3(2),'o','markeredgecolor','black','markerfacecolor',[0.7 0.7 0.7],'markersize',6);
+plot(h1(1),h1(2),'s','markeredgecolor','black','markerfacecolor',[0.5 0.5 0.5],'markersize',6);
+plot(h2(1),h2(2),'s','markeredgecolor','black','markerfacecolor',[0.5 0.5 0.5],'markersize',6);
+plot(h3(1),h3(2),'o','markeredgecolor','black','markerfacecolor',[0.5 0.5 0.5],'markersize',6);
 % set(gca,'XDir','reverse')
 % camroll(-90)
 axis equal
@@ -407,7 +443,7 @@ h3(3) = abs(h0(3))-abs(hydLoc{3}(3));
 deps = {'SOCAL_W_01','SOCAL_W_02','SOCAL_W_05','SOCAL_W_04','SOCAL_W_03'};
 
 % convert lat lon to meters, from Eric
-plotAx = [-4000, 4000, -4000, 4000];
+plotAx = [-4500, 4500, -4500, 4500];
 [x,~] = latlon2xy_wgs84(h0(1).*ones(size(X)), X, h0(1), h0(2));
 [~,y] = latlon2xy_wgs84(Y, h0(2).*ones(size(Y)), h0(1), h0(2));
 Ix = find(x>=plotAx(1)-100 & x<=plotAx(2)+100);
@@ -475,16 +511,16 @@ for j = 1:length(deps)
                     nTime = [nTime;etime(n)/etime(end)];
                 end
                 % plot(whale{wn}.wlocSmooth(:,2),whale{wn}.wlocSmooth(:,1),'linewidth',3)
-                patch([whale{1,wn}.wlocSmooth(:,2)+offset(2);nan], [whale{1,wn}.wlocSmooth(:,1)+offset(1);nan],[nTime;nan],'facecolor','none','edgecolor','interp','linewidth',1.5)
+                patch([whale{1,wn}.wlocSmooth(:,1)+offset(1);nan], [whale{1,wn}.wlocSmooth(:,2)+offset(2);nan],[nTime;nan],'facecolor','none','edgecolor','interp','linewidth',1.5)
             end
         end
     end
 end
 caxis([0 1])
 % colorbar()
-plot(h1(1),h1(2),'s','markeredgecolor','black','markerfacecolor',[0.7 0.7 0.7],'markersize',6);
-plot(h2(1),h2(2),'s','markeredgecolor','black','markerfacecolor',[0.7 0.7 0.7],'markersize',6);
-plot(h3(1),h3(2),'o','markeredgecolor','black','markerfacecolor',[0.7 0.7 0.7],'markersize',6);
+plot(h1(1),h1(2),'s','markeredgecolor','black','markerfacecolor',[0.5 0.5 0.5],'markersize',6);
+plot(h2(1),h2(2),'s','markeredgecolor','black','markerfacecolor',[0.5 0.5 0.5],'markersize',6);
+plot(h3(1),h3(2),'o','markeredgecolor','black','markerfacecolor',[0.5 0.5 0.5],'markersize',6);
 % set(gca,'XDir','reverse')
 % camroll(-90)
 axis equal
