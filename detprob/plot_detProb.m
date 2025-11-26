@@ -35,7 +35,7 @@ h = imagesc(xline,yline,prb_plot','AlphaData',0.8)
 set(h,'AlphaData',~isnan(prb_plot'))
 cmap = cmocean('dense');
 colormap(cmap)
-colorbar
+% colorbar
 hold on
 contour(x(Ix), y(Iy), Z(Iy,Ix),'black','showtext','on')
 caxis([0 1])
@@ -43,6 +43,8 @@ set(gca,'YDir','normal')
 plot(h1(1,1),h1(1,2),'s','markeredgecolor','white','markerfacecolor',[0.6 0.6 0.6],'markersize',6);
 plot(h2(1,1),h2(1,2),'s','markeredgecolor','white','markerfacecolor',[0.6 0.6 0.6],'markersize',6);
 axis equal
+xlim([-4500, 4500])
+ylim([-4500, 4500])
 % title('SOCAL E 63 Detection Probability')
 
 %% Site N
@@ -85,7 +87,7 @@ h = imagesc(xline,yline,prb_plot','AlphaData',0.8)
 set(h,'AlphaData',~isnan(prb_plot'))
 cmap = cmocean('dense');
 colormap(cmap)
-colorbar
+% colorbar
 hold on
 contour(x(Ix), y(Iy), Z(Iy,Ix),'black','showtext','on')
 caxis([0 1])
@@ -93,6 +95,8 @@ set(gca,'YDir','normal')
 plot(h1(1,1),h1(1,2),'s','markeredgecolor','white','markerfacecolor',[0.6 0.6 0.6],'markersize',6);
 plot(h2(1,1),h2(1,2),'s','markeredgecolor','white','markerfacecolor',[0.6 0.6 0.6],'markersize',6);
 axis equal
+xlim([-4500, 4500])
+ylim([-4500, 4500])
 % title('SOCAL N 68 Detection Probability')
 
 %% Site H
@@ -193,14 +197,16 @@ h = imagesc(xline,yline,finalprob','AlphaData',0.8)
 set(h,'AlphaData',~isnan(finalprob'))
 cmap = cmocean('dense');
 colormap(cmap)
-colorbar
+% colorbar
 hold on
 contour(x(Ix), y(Iy), Z(Iy,Ix),'black','showtext','on')
 caxis([0 1])
 set(gca,'YDir','normal')
-plot(h1(1,1),h1(1,2),'s','markeredgecolor','white','markerfacecolor',[0.6 0.6 0.6],'markersize',6);
-plot(h2(1,1),h2(1,2),'s','markeredgecolor','white','markerfacecolor',[0.6 0.6 0.6],'markersize',6);
+plot(h1(1,1),h1(1,2),'s','markeredgecolor','white','markerfacecolor',[1.0000    1.0000    0.0667],'markersize',6);
+plot(h2(1,1),h2(1,2),'s','markeredgecolor','white','markerfacecolor',[1.0000    1.0000    0.0667],'markersize',6);
 axis equal
+xlim([-4500, 4500])
+ylim([-4500, 4500])
 % title('SOCAL N 68 Detection Probability')
 
 
@@ -307,18 +313,16 @@ h = imagesc(xline,yline,finalprob','AlphaData',0.8)
 set(h,'AlphaData',~isnan(finalprob'))
 cmap = cmocean('dense');
 colormap(cmap)
-colorbar
+% colorbar
 hold on
 contour(x(Ix), y(Iy), Z(Iy,Ix),'black','showtext','on')
 caxis([0 1])
 set(gca,'YDir','normal')
-plot(h1(1,1),h1(1,2),'s','markeredgecolor','white','markerfacecolor',[0.6 0.6 0.6],'markersize',6);
-plot(h2(1,1),h2(1,2),'s','markeredgecolor','white','markerfacecolor',[0.6 0.6 0.6],'markersize',6);
+plot(h1(1,1),h1(1,2),'s','markeredgecolor','white','markerfacecolor',[1.0000    1.0000    0.0667],'markersize',6);
+plot(h2(1,1),h2(1,2),'s','markeredgecolor','white','markerfacecolor',[1.0000    1.0000    0.0667],'markersize',6);
 axis equal
+xlim([-4500, 4500])
+ylim([-4500, 4500])
 % title('SOCAL N 68 Detection Probability')
-
-
-
-
 
 

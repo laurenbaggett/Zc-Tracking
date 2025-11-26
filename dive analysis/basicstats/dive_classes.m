@@ -40,7 +40,10 @@ for j = 1:length(deps)
                     % above the seafloor
                     if distfromsf{wn}(1,2) > th
                         % when the whale makes it to foraging depth
-                        turnidx = find(distfromsf{wn}(:,2)>th,1,'last');
+                        turnidx = find(distfromsf{wn}(:,2)<th,1,'first');
+                        if isempty(turnidx)
+                            turnidx = size(distfromsf{wn},1);
+                        end
                         turns(wn) = turnidx;
                     end % close if statement for th
                 end % close if statement for generated smooth
@@ -48,7 +51,7 @@ for j = 1:length(deps)
             end % for loop for whale number
 
             if any(~isnan(turns))
-                save([df(i).folder,'\',df(i).name,'\',trackNum,'_turns.mat'],'turns') % save the matrix
+                save([df(i).folder,'\',df(i).name,'\',trackNum,'_turns2.mat'],'turns') % save the matrix
                 disp(string(trackNum))
             end
 

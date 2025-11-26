@@ -3,34 +3,27 @@
 
 % % bathymetry data from gmrt, extract as a grd file
 % [X, Y, Z] = grdread2('D:\Other\Bathymetry\CADEMO_zoom.grd'); % load the data
-% contour(X,Y,Z,'black','showtext','on'); % check that it looks right
 % save('D:\Other\Bathymetry\CHNMS_NO_bathy.mat','X','Y','Z') % save if you want
 load('F:\Tracking\bathymetry\socal_new.mat');
 
-% make the map of site H
-% load('F:\bathymetry\socal_new.mat');
-v = [0,0];
-CHNMS_NO = [34.5743 -120.7133];
+% define site coordinates
+v = [0,0]; % for adding a black line for land
 H = [32.86117  -119.13516 -1282.5282];
 W = [33.53973  -120.25815 -1377.8741];
 N = [32.36975  -118.56458 -1298.3579];
 E = [32.65345  -119.48455 -1328.9836];
 
 % define the colormap
-% a = cmocean('ice')
 a = m_colmap('blues');
-% a = a(10:end,:);
 a = vertcat(a,[0.8020    0.8020    0.8020]); % add grey for land
-% a = a(25:end,:);
 
 figure
 contourf(X,Y,Z,150,'edgecolor','none') % 'showtext','on') %10) %,'edgecolor','black')
-colormap(a)
-caxis([-2000 0])
-% hold on
+colormap(a) % set the colormap to blues
+caxis([-2000 0]) % max depth shown is 2000 m
 hold on
-contourf(X,Y,Z,v,'k')
-c = colorbar
+contourf(X,Y,Z,v,'k') % add black line for land
+c = colorbar; % add a colorbar
 ylabel(c,'Depth (m)')
 scatter(W(2),W(1),150,'o','filled','red')
 scatter(H(2),H(1),150,'o','filled','red')
@@ -38,19 +31,9 @@ scatter(E(2),E(1),150,'o','filled','red')
 scatter(N(2),N(1),150,'o','filled','red')
 yticks([32 33 34 35])
 yticklabels({'32°N', '33°N','34°N','35°N'})
-ytickangle(90)
 xticks([-120, -119, -118])
 xticklabels({'120°W','119°W','118°W'})
-% legend(b,{'SOCAL H'})
-% add a point for landmarks
-scatter(-118.2437,34.0722,20,'o','filled','black')
-scatter(-119.6982,34.5208,20,'o','filled','black')
-% text(-118.2437,34.0722,'Los Angeles','HorizontalAlignment','right','fontsize',12,'fontweight','bold')
-% text(-118.4981,32.9029,'San Clemente','HorizontalAlignment','center','fontsize',8,'fontweight','bold','FontName','Georgia')
-% text(-119.4992,33.2465,'San Nicholas','HorizontalAlignment','center','fontsize',8,'fontweight','bold','FontName','Georgia')
-% text(-118.4163,33.3879,'Catalina','HorizontalAlignment','center','fontsize',8,'fontweight','bold','FontName','Georgia')
-% text(-119.7658,34.0232,'Santa Cruz','HorizontalAlignment','center','fontsize',8,'fontweight','bold','FontName','Georgia')
-% text(-120.0896,33.9773,'Santa Rosa','HorizontalAlignment','center','fontsize',8,'fontweight','bold','FontName','Georgia')
-% text(-120.3724,34.0376,'San Miguel','HorizontalAlignment','center','fontsize',7)
-% text(-119.6982,34.5208,'Santa Barbara','HorizontalAlignment','right','fontsize',12,'fontweight','bold')
+scatter(-118.2437,34.0722,20,'o','filled','black') % Los Angeles
+scatter(-119.6982,34.5208,20,'o','filled','black') % Santa Barbara
+
 

@@ -8,18 +8,20 @@
 % deps = {'SOCAL_H_72','SOCAL_H_73','SOCAL_H_74','SOCAL_H_75'};
 % deps = {'SOCAL_E_63'};
 % deps = {'SOCAL_N_68'};
-deps = {'SOCAL_W_01','SOCAL_W_02','SOCAL_W_03','SOCAL_W_04','SOCAL_W_05', ...
-    'SOCAL_H_72','SOCAL_H_73','SOCAL_H_74','SOCAL_H_75', ...
-    'SOCAL_E_63','SOCAL_N_68'};
+% deps = {'SOCAL_W_01','SOCAL_W_02','SOCAL_W_03','SOCAL_W_04','SOCAL_W_05', ...
+%     'SOCAL_H_72','SOCAL_H_73','SOCAL_H_74','SOCAL_H_75', ...
+%     'SOCAL_E_63','SOCAL_N_68'};
+deps = {'LANAI_A_01'};
 
 for j = 1:length(deps)
 
-    df = dir(['F:\Tracking\Erics_detector\',char(deps(j)),'\cleaned_tracks\track*']);
+    % df = dir(['F:\Tracking\Erics_detector\',char(deps(j)),'\cleaned_tracks\track*']);
+    df = dir('N:\Tracking\HGC_Tracking\pilotwhale_LMBdetector\track*');
 
     for i = 1:length(df)
 
         myFile = dir([df(i).folder,'\',df(i).name,'\*whale.mat']); % load the folder name
-        trackNum = extractAfter(myFile(1).folder,'cleaned_tracks\'); % grab the track num for naming later
+        trackNum = extractAfter(myFile(1).folder,'detector\'); % grab the track num for naming later
         load(fullfile([myFile(1).folder,'\',myFile(1).name])); % load the file
 
         speedStruct = whale_spd(whale);
@@ -60,7 +62,7 @@ for j = 1:length(deps)
         trackNum = extractAfter(myFile(1).folder,'cleaned_tracks\'); % grab the track num for naming later
         load(fullfile([myFile(1).folder,'\',myFile(1).name])); % load the file
         % z_stats is outdated, look for turns
-        myFile = dir([df(i).folder,'\',df(i).name,'\*turns.mat']); % load the folder name
+        myFile = dir([df(i).folder,'\',df(i).name,'\*turns2.mat']); % load the folder name
 
         if ~isempty(myFile) % if we have a turns file
             load(fullfile([myFile.folder,'\',myFile.name])); % load the file
@@ -78,10 +80,13 @@ for j = 1:length(deps)
                     tt = speedStruct{wn}.values(1:turns(wn)-1,:);
                     tt = sum(tt(~isnan(tt.spd),2));
 
-                    if tt.tms > 60*5 % 10 minute threshold
+                    if tt.tms > 60*5 % 5 minute threshold for initial descent
 
                         desc = speedStruct{wn}.values.spd(1:turns(wn)-1);
                         medDesc = nanmedian(desc);
+                        if medDesc > 15
+                            keyboard
+                        end
                         stdDesc = nanstd(desc);
                         mSpDesc = [mSpDesc,medDesc];
                         stdSpDesc = [stdSpDesc,stdDesc];
@@ -103,9 +108,12 @@ for j = 1:length(deps)
                         tt = speedStruct{wn}.values(turns(wn):end,:);
                         tt = sum(tt(~isnan(tt.spd),2));
 
-                        if tt.tms > 60*5 % 10 minute threshold
+                        if tt.tms > 60*10 % 10 minute threshold for remaining at depth
 
                             medDepth = nanmedian(speedStruct{wn}.values.spd(turns(wn):end));
+                            if medDepth > 15
+                                keyboard
+                            end
                             stdDepth = nanstd(speedStruct{wn}.values.spd(turns(wn):end));
                             mSp = [mSp,medDepth];
                             stdSp = [stdSp,stdDepth];
@@ -126,7 +134,7 @@ for j = 1:length(deps)
 
                 end
 
-                if speedStruct{wn}.summary.trackedTimes > 60*5 % 10 minute threshold
+                if speedStruct{wn}.summary.trackedTimes > 60*10 % 10 minute threshold for only at depth tracks
                     mSp = [mSp,speedStruct{wn}.summary.medianSpd];
                     stdSp = [stdSp,speedStruct{wn}.summary.stdSpd];
                     stlet = deps{j}(7);
@@ -214,6 +222,14 @@ xlabel('Median Speed (m/s)');
 % ylim([0 120])
 
 % doesn't seem to be much of a difference here
+
+% % make some boxplots
+% figure
+% boxplot(mSp(find(site==1)))
+% hold on
+% boxplot(mSp(find(site==2)))
+% boxplot(mSp(find(site==3)))
+% boxplot(mSp(find(site==4)))
 
 
 % % export for R analysis

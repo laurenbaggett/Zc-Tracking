@@ -31,7 +31,7 @@ for i = 1:length(df) % for each track
     end
     whale(cellfun('isempty',whale)) = []; % remove any empty fields
 
-    if length(whale) >= 3 % if we have more than one whale
+    if length(whale) >= 1 % if we have more than one whale
 
         % interpolate
         for wn = 1:numel(whale)
@@ -99,8 +99,8 @@ load('F:\Tracking\Instrument_Orientation\SOCAL_N_68\SOCAL_N_68_NW\dep\SOCAL_N_68
 hydLoc{2} = recLoc;
 h0 = mean([hydLoc{1}; hydLoc{2}]);
 hydLoc{3} = [32.36975  -118.56458 -1298.3579];
-
-% % E 63
+ 
+% E 63
 % hydLoc{2} = [32.65871  -119.47711 -1325.5285]; % EE
 % hydLoc{1} = [32.65646  -119.48815 -1330.1631]; % EW
 % h0 = mean([hydLoc{1}; hydLoc{2}]);
@@ -136,12 +136,15 @@ colorbar
 hold on
 contour(x(Ix), y(Iy), Z(Iy,Ix),'black','showtext','on')
 % caxis(cRange)
-caxis([0 4])
+caxis([0 20]) % site N % caxis([0 20]) % site E
 set(gca,'YDir','normal')
 plot(h1(1),h1(2),'s','markeredgecolor','white','markerfacecolor',[0 0 0],'markersize',6);
 plot(h2(1),h2(2),'s','markeredgecolor','white','markerfacecolor',[0 0 0],'markersize',6);
+plot(h3(1),h3(2),'o','markeredgecolor','white','markerfacecolor',[0 0 0],'markersize',6);
 % plot(h3(1),h3(2),'o','markeredgecolor','white','markerfacecolor',[0.8 0.8 0.8],'markersize',6);
 % title(['Site ',dfList{1}(7)])
+xlim([-4500, 4500])
+ylim([-4500, 4500])
 axis equal
 
 %% Site H
@@ -223,7 +226,7 @@ for i = 1:length(df) % for each track
     end
     whale(cellfun('isempty',whale)) = []; % remove any empty fields
 
-    if length(whale) >= 3 % if we have more than one whale
+    if length(whale) >= 1 % if we have more than one whale
 
         % interpolate
         for wn = 1:numel(whale)
@@ -322,11 +325,13 @@ colorbar
 hold on
 contour(x(Ix), y(Iy), Z(Iy,Ix),'black','showtext','on')
 % caxis(cRange)
-caxis([0 17])
+caxis([0 32])
 set(gca,'YDir','normal')
-plot(h1(1),h1(2),'s','markeredgecolor','white','markerfacecolor',[0 0 0],'markersize',6);
-plot(h2(1),h2(2),'s','markeredgecolor','white','markerfacecolor',[0 0 0],'markersize',6);
+plot(h1(1),h1(2),'s','markeredgecolor','white','markerfacecolor',[1.0000    1.0000    0.0667],'markersize',6);
+plot(h2(1),h2(2),'s','markeredgecolor','white','markerfacecolor',[1.0000    1.0000    0.0667],'markersize',6);
 % plot(h3(1),h3(2),'o','markeredgecolor','white','markerfacecolor',[0.8 0.8 0.8],'markersize',6);
+xlim([-4500, 4500])
+ylim([-4500, 4500])
 axis equal
 % title(['Site ',dfList{1}(7)])
 
@@ -336,9 +341,11 @@ axis equal
 % plot a heatmap showing where the most tracks are for a given deployment
 spd = 60*60*24;
 
+vp = [33.53503 -120.2560];
+
 % initialize by making an empty matrix
-xline = [-4000:100:4000]; % x limits, 1000 m bins
-yline = [-4000:100:4000]'; % y limits 1000 m bins
+xline = [-4500:100:4500]; % x limits, 1000 m bins
+yline = [-4500:100:4500]'; % y limits 1000 m bins
 grdf = zeros(length(xline),length(yline)); % final gridded zeros, initialized
 
 dfList = {'SOCAL_W_01','SOCAL_W_02','SOCAL_W_03','SOCAL_W_04', 'SOCAL_W_05'};
@@ -360,6 +367,8 @@ h1(3) = abs(h0(3))-abs(hydLoc{1}(3));
 h2(3) = abs(h0(3))-abs(hydLoc{2}(3));
 [h3(1), h3(2)] = latlon2xy_wgs84(hydLoc{3}(1), hydLoc{3}(2), h0(1), h0(2));
 h3(3) = abs(h0(3))-abs(hydLoc{3}(3));
+
+[vp(1), vp(2)] = latlon2xy_wgs84(vp(1),vp(2),h0(1),h0(2));
 
 for m = 1:length(dfList)
 
@@ -420,7 +429,7 @@ for i = 1:length(df) % for each track
     end
     whale(cellfun('isempty',whale)) = []; % remove any empty fields
 
-    if length(whale) >= 3 % if we have more than one whale
+    if length(whale) >= 1 % if we have more than one whale
 
         % interpolate
         for wn = 1:numel(whale)
@@ -491,7 +500,7 @@ Ix = find(x>=plotAx(1)-100 & x<=plotAx(2)+100);
 Iy = find(y>=plotAx(3)-100 & y<=plotAx(4)+100);
 
 cmap = cmocean('dense');
-cmap = vertcat([1 1 1],cmap);
+% cmap = vertcat([1 1 1],cmap);
 grdf(grdf==0) = nan;
 
 figure
@@ -504,10 +513,14 @@ colorbar
 hold on
 contour(x(Ix), y(Iy), Z(Iy,Ix),'black','showtext','on')
 % caxis(cRange)
-caxis([0 57])
+caxis([0 120])
 set(gca,'YDir','normal')
-plot(h1(1),h1(2),'s','markeredgecolor','white','markerfacecolor',[0 0 0],'markersize',6);
-plot(h2(1),h2(2),'s','markeredgecolor','white','markerfacecolor',[0 0 0],'markersize',6);
+plot(h1(1),h1(2),'s','markeredgecolor','white','markerfacecolor',[1.0000    1.0000    0.0667],'markersize',6);
+plot(h2(1),h2(2),'s','markeredgecolor','white','markerfacecolor',[1.0000    1.0000    0.0667],'markersize',6);
+plot(h3(1),h3(2),'o','markeredgecolor','white','markerfacecolor',[1.0000    1.0000    0.0667],'markersize',6);
+plot(vp(1),vp(2),'o','markeredgecolor','white','markerfacecolor','red','markersize',6);
+xlim([-4500, 4500])
+ylim([-4500, 4500])
 axis equal
 % plot(h3(1),h3(2),'o','markeredgecolor','white','markerfacecolor',[0.8 0.8 0.8],'markersize',6);
 % title(['Site ',dfList{1}(7)])

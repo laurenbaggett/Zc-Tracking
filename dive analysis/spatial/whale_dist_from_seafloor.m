@@ -4,30 +4,30 @@
 % time
 
 %% define site
-% % W 01
-% load('F:\Tracking\Instrument_Orientation\SOCAL_W_01\SOCAL_W_01_WE\dep\SOCAL_W_01_WE_harp4chPar');
-% hydLoc{1} = recLoc;
-% clear recLoc
-% load('F:\Tracking\Instrument_Orientation\SOCAL_W_01\SOCAL_W_01_WS\dep\SOCAL_W_01_WS_harp4chPar');
-% hydLoc{2} = recLoc;
-% h0 = mean([hydLoc{1}; hydLoc{2}]);
-% hydLoc{3} = [33.53973  -120.25815 -1377.8741];
-% % W 02
-% load('F:\Tracking\Instrument_Orientation\SOCAL_W_02\SOCAL_W_02_WE\dep\SOCAL_W_02_WE_dep_harp4chParams');
-% hydLoc{1} = recLoc;
-% clear recLoc
-% load('F:\Tracking\Instrument_Orientation\SOCAL_W_02\SOCAL_W_02_WS\dep\SOCAL_W_02_WS_harp4chParams.mat');
-% hydLoc{2} = recLoc;
-% h0 = mean([hydLoc{1}; hydLoc{2}]);
-% hydLoc{3} = [33.54057  -120.25866 -1370.4091];
-% % W 03
-% load('F:\Tracking\Instrument_Orientation\SOCAL_W_03\SOCAL_W_03_WS\dep\SOCAL_W_03_WS_harp4chParams');
-% hydLoc{1} = recLoc;
-% clear recLoc
-% load('F:\Tracking\Instrument_Orientation\SOCAL_W_03\SOCAL_W_03_WE\dep\SOCAL_W_03_WE_harp4chParams');
-% hydLoc{2} = recLoc;
-% h0 = mean([hydLoc{1}; hydLoc{2}]);
-% hydLoc{3} = [33.54117  -120.25922 -1383.9635];
+% W 01
+load('F:\Tracking\Instrument_Orientation\SOCAL_W_01\SOCAL_W_01_WE\dep\SOCAL_W_01_WE_harp4chPar');
+hydLoc{1} = recLoc;
+clear recLoc
+load('F:\Tracking\Instrument_Orientation\SOCAL_W_01\SOCAL_W_01_WS\dep\SOCAL_W_01_WS_harp4chPar');
+hydLoc{2} = recLoc;
+h0 = mean([hydLoc{1}; hydLoc{2}]);
+hydLoc{3} = [33.53973  -120.25815 -1377.8741];
+% W 02
+load('F:\Tracking\Instrument_Orientation\SOCAL_W_02\SOCAL_W_02_WE\dep\SOCAL_W_02_WE_dep_harp4chParams');
+hydLoc{1} = recLoc;
+clear recLoc
+load('F:\Tracking\Instrument_Orientation\SOCAL_W_02\SOCAL_W_02_WS\dep\SOCAL_W_02_WS_harp4chParams.mat');
+hydLoc{2} = recLoc;
+h0 = mean([hydLoc{1}; hydLoc{2}]);
+hydLoc{3} = [33.54057  -120.25866 -1370.4091];
+% W 03
+load('F:\Tracking\Instrument_Orientation\SOCAL_W_03\SOCAL_W_03_WS\dep\SOCAL_W_03_WS_harp4chParams');
+hydLoc{1} = recLoc;
+clear recLoc
+load('F:\Tracking\Instrument_Orientation\SOCAL_W_03\SOCAL_W_03_WE\dep\SOCAL_W_03_WE_harp4chParams');
+hydLoc{2} = recLoc;
+h0 = mean([hydLoc{1}; hydLoc{2}]);
+hydLoc{3} = [33.54117  -120.25922 -1383.9635];
 % % W 04
 % load('F:\Tracking\Instrument_Orientation\SOCAL_W_04\SOCAL_W_04_WS\dep\SOCAL_W_04_WS_harp4chParams');
 % hydLoc{1} = recLoc;
@@ -36,14 +36,14 @@
 % hydLoc{2} = recLoc;
 % h0 = mean([hydLoc{1}; hydLoc{2}]);
 % hydLoc{3} = [33.54079  -120.25996 -1387.6076];
-% % W 05
-% load('F:\Tracking\Instrument_Orientation\SOCAL_W_05\SOCAL_W_05_WE\REDO\SOCAL_W_05_WE_harp4chParams');
-% hydLoc{1} = recLoc;
-% clear recLoc
-% load('F:\Tracking\Instrument_Orientation\SOCAL_W_05\SOCAL_W_05_WS\REDO\SOCAL_W_05_WS_harp4chParams');
-% hydLoc{2} = recLoc;
-% h0 = mean([hydLoc{1}; hydLoc{2}]);
-% hydLoc{3} = [33.54196  -120.25820 -1510.562];
+% W 05
+load('F:\Tracking\Instrument_Orientation\SOCAL_W_05\SOCAL_W_05_WE\REDO\SOCAL_W_05_WE_harp4chParams');
+hydLoc{1} = recLoc;
+clear recLoc
+load('F:\Tracking\Instrument_Orientation\SOCAL_W_05\SOCAL_W_05_WS\REDO\SOCAL_W_05_WS_harp4chParams');
+hydLoc{2} = recLoc;
+h0 = mean([hydLoc{1}; hydLoc{2}]);
+hydLoc{3} = [33.54196  -120.25820 -1510.562];
 
 % % E 63
 % hydLoc{1} = [32.65871  -119.47711 -1325.5285]; % EE
@@ -67,22 +67,22 @@
 % hydLoc{2} = recLoc;
 % h0 = mean([hydLoc{1}; hydLoc{2}]);
 % hydLoc{3} = [32.86098  -119.13526 -1268.0248];
-% % H 74
-% load('F:\Tracking\Instrument_Orientation\SOCAL_H_74\SOCAL_H_74_HS\rec\SOCAL_H_74_HS_harp4chParams');
-% hydLoc{1} = recLoc;
-% clear recLoc
-% load('F:\Tracking\Instrument_Orientation\SOCAL_H_74\SOCAL_H_74_HW\rec\SOCAL_H_74_HW_harp4chParams');
-% hydLoc{2} = recLoc;
-% h0 = mean([hydLoc{1}; hydLoc{2}]);
-% hydLoc{3} = [32.8609  -119.1353 -1272];
-% % H 75
-% load('F:\Tracking\Instrument_Orientation\SOCAL_H_75\SOCAL_H_75_HS\rec\SOCAL_H_75_HS_harp4chPar');
-% hydLoc{1} = recLoc;
-% clear recLoc
-% load('F:\Tracking\Instrument_Orientation\SOCAL_H_75\SOCAL_H_75_HW\rec\SOCAL_H_75_HW_harp4chParams');
-% hydLoc{2} = recLoc;
-% h0 = mean([hydLoc{1}; hydLoc{2}]);
-% hydLoc{3} = [32.86216  -119.13519 -1284.5215];
+% H 74
+load('F:\Tracking\Instrument_Orientation\SOCAL_H_74\SOCAL_H_74_HS\rec\SOCAL_H_74_HS_harp4chParams');
+hydLoc{1} = recLoc;
+clear recLoc
+load('F:\Tracking\Instrument_Orientation\SOCAL_H_74\SOCAL_H_74_HW\rec\SOCAL_H_74_HW_harp4chParams');
+hydLoc{2} = recLoc;
+h0 = mean([hydLoc{1}; hydLoc{2}]);
+hydLoc{3} = [32.8609  -119.1353 -1272];
+% H 75
+load('F:\Tracking\Instrument_Orientation\SOCAL_H_75\SOCAL_H_75_HS\rec\SOCAL_H_75_HS_harp4chPar');
+hydLoc{1} = recLoc;
+clear recLoc
+load('F:\Tracking\Instrument_Orientation\SOCAL_H_75\SOCAL_H_75_HW\rec\SOCAL_H_75_HW_harp4chParams');
+hydLoc{2} = recLoc;
+h0 = mean([hydLoc{1}; hydLoc{2}]);
+hydLoc{3} = [32.86216  -119.13519 -1284.5215];
 
 % N 68
 load('F:\Tracking\Instrument_Orientation\SOCAL_N_68\SOCAL_N_68_NS\dep\SOCAL_N_68_NS_harp4chParams');
@@ -123,7 +123,7 @@ z = cast(z,"double");
 % save
 % calculate an average value? save per deployment?
 
-df = dir(['F:\Tracking\Erics_detector\SOCAL_N_68\cleaned_tracks\track*']); % directory of folders containing files
+df = dir(['F:\Tracking\Erics_detector\SOCAL_H_75\cleaned_tracks\track*']); % directory of folders containing files
 distfromsfmeans = [];
 
 for i = 1:length(df) % for each track
@@ -198,5 +198,5 @@ for i = 1:length(df) % for each track
 
 end
 
-save('F:\Tracking\Erics_detector\SOCAL_N_68\deployment_stats\SOCAL_N_68_mean_distfromsf_NEW.mat','distfromsfmeans'); % save the struct
+save('F:\Tracking\Erics_detector\SOCAL_H_75\deployment_stats\SOCAL_H_75_mean_distfromsf_NEW.mat','distfromsfmeans'); % save the struct
 

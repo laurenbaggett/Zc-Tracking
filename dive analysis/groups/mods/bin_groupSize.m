@@ -38,7 +38,7 @@ q=dbInit('Server','breach.ucsd.edu','Port',9779);
 % lat lon of san diego for diel data
 lat = 32 + 42/60 + 52.9/3600;
 lon = 360 - (117 + 09/60 + 21.6/3600);
-night = dbDiel(q,lat, lon,  effort.Start, effort.End); %get sunrise sunset data
+night = dbDiel(q,lat, lon,  effort.Start(1), effort.End(1)); %get sunrise sunset data
 
 % define time bin duration
 p.binDur = 320; % 25 minutes

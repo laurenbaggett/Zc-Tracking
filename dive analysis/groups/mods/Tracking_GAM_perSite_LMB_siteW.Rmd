@@ -239,7 +239,6 @@ fwdSelection3[order(fwdSelection3[,3],decreasing=FALSE),]
 # the full model has the lowest AIC
 bestModel = gam(groupSize~
                   + s(dfMod$jd,bs='cc')
-                  # + s(dfMod$dayNight,bs='cc')
                   + s(presBins,bs='ts'),
                 data=dfMod,family=tw(),method='REML')
 summary(bestModel)

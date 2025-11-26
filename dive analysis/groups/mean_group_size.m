@@ -16,3 +16,4 @@ end
 
 mean(numWhales)
 std(numWhales)
+median(numWhales)

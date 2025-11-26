@@ -351,9 +351,9 @@ for j = 1:length(deps)
 end
 caxis([0 1])
 % colorbar()
-plot(h1(1),h1(2),'s','markeredgecolor','black','markerfacecolor',[0.5 0.5 0.5],'markersize',6);
-plot(h2(1),h2(2),'s','markeredgecolor','black','markerfacecolor',[0.5 0.5 0.5],'markersize',6);
-plot(h3(1),h3(2),'o','markeredgecolor','black','markerfacecolor',[0.5 0.5 0.5],'markersize',6);
+plot(h1(1),h1(2),'s','markeredgecolor','black','markerfacecolor',[1.0000    1.0000    0.0667],'markersize',6);
+plot(h2(1),h2(2),'s','markeredgecolor','black','markerfacecolor',[1.0000    1.0000    0.0667],'markersize',6);
+plot(h3(1),h3(2),'o','markeredgecolor','black','markerfacecolor',[1.0000    1.0000    0.0667],'markersize',6);
 % set(gca,'XDir','reverse')
 % camroll(-90)
 axis equal
@@ -415,6 +415,8 @@ ylim([-1500 0])
 % colorbar
 
 %% site W
+
+spd = 60*60*24;
 
 % need to plot per deployment, add the appropriate offset for each
 % deployment
@@ -518,9 +520,9 @@ for j = 1:length(deps)
 end
 caxis([0 1])
 % colorbar()
-plot(h1(1),h1(2),'s','markeredgecolor','black','markerfacecolor',[0.5 0.5 0.5],'markersize',6);
-plot(h2(1),h2(2),'s','markeredgecolor','black','markerfacecolor',[0.5 0.5 0.5],'markersize',6);
-plot(h3(1),h3(2),'o','markeredgecolor','black','markerfacecolor',[0.5 0.5 0.5],'markersize',6);
+plot(h1(1),h1(2),'s','markeredgecolor','black','markerfacecolor',[1.0000    1.0000    0.0667],'markersize',6);
+plot(h2(1),h2(2),'s','markeredgecolor','black','markerfacecolor',[1.0000    1.0000    0.0667],'markersize',6);
+plot(h3(1),h3(2),'o','markeredgecolor','black','markerfacecolor',[1.0000    1.0000    0.0667],'markersize',6);
 % set(gca,'XDir','reverse')
 % camroll(-90)
 axis equal
@@ -578,6 +580,10 @@ for j = 1:length(deps)
                 nTime = [];
                 for n = 1:length(etime)
                     nTime = [nTime;etime(n)/etime(end)];
+                end
+
+                if any(whale{wn}.wlocSmooth(:,3)+h0(3) > -200)
+                    keyboard
                 end
                 patch([etime;nan],[whale{wn}.wlocSmooth(:,3)+h0(3);nan],[nTime;nan],'facecolor','none','edgecolor','interp','linewidth',1.5)
             end

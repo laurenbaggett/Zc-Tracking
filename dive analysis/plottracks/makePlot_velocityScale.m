@@ -1,11 +1,14 @@
 % load('D:\presentations\Lauren_tracks\track33_loc3D_DOA_whale.mat')
-load('track182_loc3D_DOA_whale.mat')
+load('F:\Tracking\Erics_detector\SOCAL_W_03\cleaned_tracks\track423\track423_loc3D_DOA_whale.mat')
 spd = 60*60*24;
 global brushing
-loadParams('D:\MATLAB_addons\gitHub\wheresWhaledo\brushing.params')
+loadParams('C:\Users\Lauren\Documents\GitHub\Wheres-Whaledo\DOA_small_aperture\params\brushing.params')
 
-hydLoc{1} = [32.861640000000000,-119.1434300000000,-1253.391300000000];
-hydLoc{2} = [32.856260000000000,-119.1389600000000,-1246.449600000000];
+load('F:\Tracking\Instrument_Orientation\SOCAL_W_03\SOCAL_W_03_WS\dep\SOCAL_W_03_WS_harp4chParams');
+hydLoc{1} = recLoc;
+clear recLoc
+load('F:\Tracking\Instrument_Orientation\SOCAL_W_03\SOCAL_W_03_WE\dep\SOCAL_W_03_WE_harp4chParams');
+hydLoc{2} = recLoc;
 
 h0 = mean([hydLoc{1}; hydLoc{2}]);
 
@@ -14,8 +17,9 @@ h1(3) = hydLoc{1}(3);
 [h2(1), h2(2)] = latlon2xy_wgs84(hydLoc{2}(1), hydLoc{2}(2), h0(1), h0(2));
 h2(3) = hydLoc{2}(3);
 hloc = [h1; h2];
+
 %% begin movie making
-[B, R] = readgeoraster('F:\bathymetry\siteN'); %bathymetry data
+[B, R] = readgeoraster('F:\Tracking\bathymetry\siteW_topo.tif'); %bathymetry data
 
 [xblim, yblim] = latlon2xy_wgs84(R.YWorldLimits, R.XWorldLimits, h0(1), h0(2));
 xb = linspace(xblim(1), xblim(2), R.RasterSize(2));

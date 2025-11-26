@@ -2,7 +2,7 @@
 % LMB 3/21/24 2023a
 
 % directory of files
-df = dir('F:\Tracking\Erics_detector\SOCAL_W_05\cleaned_tracks\track*');
+df = dir('F:\Tracking\Erics_detector\SOCAL_W_01\cleaned_tracks\track*');
 
 % define effort period for this deployment
 % % SOCAL_E_63
@@ -23,9 +23,9 @@ df = dir('F:\Tracking\Erics_detector\SOCAL_W_05\cleaned_tracks\track*');
 % % SOCAL_H_75
 % effStart = datetime('16-Oct-2022');
 % effEnd = datetime('18-Apr-2023');
-% % SOCAL_W_01
-% effStart = datetime('29-Jul-2021');
-% effEnd = datetime('22-Jan-2022');
+% SOCAL_W_01
+effStart = datetime('29-Jul-2021');
+effEnd = datetime('22-Jan-2022');
 % % SOCAL_W_02
 % effStart = datetime('10-Mar-2022');
 % effEnd = datetime('27-May-2022');
@@ -35,9 +35,9 @@ df = dir('F:\Tracking\Erics_detector\SOCAL_W_05\cleaned_tracks\track*');
 % % SOCAL_W_04
 % effStart = datetime('17-Oct-2022');
 % effEnd = datetime('15-Apr-2023');
-% SOCAL_W_05
-effStart = datetime('16-Apr-2023');
-effEnd = datetime('25-Sep-2023');
+% % SOCAL_W_05
+% effStart = datetime('16-Apr-2023');
+% effEnd = datetime('25-Sep-2023');
 
 % connect to Tethys for diel data
 q=dbInit('Server','breach.ucsd.edu','Port',9779);
@@ -128,6 +128,6 @@ for i = 1:length(df)
 
 end
 
-writetable(grpDayJDTable,'F:\Tracking\Erics_detector\SOCAL_W_05\deployment_stats\SOCAL_W_05_night_jd.csv');
+% writetable(grpDayJDTable,'F:\Tracking\Erics_detector\SOCAL_W_05\deployment_stats\SOCAL_W_05_night_jd.csv');
 
 clear all

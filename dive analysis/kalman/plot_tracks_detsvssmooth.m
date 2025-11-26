@@ -10,20 +10,20 @@
 % load('F:\Tracking\Erics_detector\SOCAL_W_05\cleaned_tracks\track27\track27_loc3D_DOA_whale.mat');
 % load('F:\Tracking\Erics_detector\SOCAL_W_05\cleaned_tracks\track37\track37_loc3D_DOA_whale.mat');
 % load('F:\Tracking\Erics_detector\SOCAL_W_03\cleaned_tracks\track66\track66_loc3D_DOA_whale.mat');
-load('F:\Tracking\Erics_detector\SOCAL_W_03\cleaned_tracks\track82\track82_loc3D_DOA_whale.mat');
+load('F:\Tracking\Erics_detector\SOCAL_W_05\cleaned_tracks\track853\track853_loc3D_DOA_whale.mat');
 
 
 % load bathymetry
 load('F:\Tracking\bathymetry\socal2');
 % load receiver positions
 % W 05
-load('F:\Tracking\Instrument_Orientation\SOCAL_W_03\SOCAL_W_03_WE\dep\SOCAL_W_03_WE_harp4chParams');
+load('F:\Tracking\Instrument_Orientation\SOCAL_W_05\SOCAL_W_05_WE\SOCAL_W_05_WE_harp4chParams');
 hydLoc{1} = recLoc;
 clear recLoc
-load('F:\Tracking\Instrument_Orientation\SOCAL_W_03\SOCAL_W_03_WS\dep\SOCAL_W_03_WS_harp4chParams');
+load('F:\Tracking\Instrument_Orientation\SOCAL_W_05\SOCAL_W_05_WS\SOCAL_W_05_WS_harp4chPar');
 hydLoc{2} = recLoc;
 h0 = mean([hydLoc{1}; hydLoc{2}]);
-hydLoc{3} = [33.54117  -120.25922 -1383.9635];
+hydLoc{3} = [33.54085  -120.25924 -1385.2436];
 % convert hydrophone locations to meters:
 [h1(1), h1(2)] = latlon2xy_wgs84(hydLoc{1}(1), hydLoc{1}(2), h0(1), h0(2));
 h1(3) = abs(h0(3))-abs(hydLoc{1}(3));
@@ -44,7 +44,7 @@ Ix = find(x>=plotAx(1)-100 & x<=plotAx(2)+100);
 Iy = find(y>=plotAx(3)-100 & y<=plotAx(4)+100);
 
 % plot the smoothed
-colorVec = {[0.8784    0.1412    0.4353],[0.4667    0.6745    0.1882],'cyan','yellow','blue'};
+colorVec = {[0.984314, 0.603922, 0.600000],[0.756863, 0.874510, 0.541176],[0.650980, 0.807843, 0.890196],[0.992157, 0.749020, 0.435294],[0.121569, 0.470588, 0.705882]};
 figure
 contour(x(Ix), y(Iy), Z(Iy,Ix),'color',[0.6 0.6 0.6],'showtext','on')
 hold on
@@ -85,11 +85,28 @@ for wn = 1:length(whale)
     if isempty(whale{wn})
         continue
     else
-        scatter3(whale{wn}.wloc(:,2),whale{wn}.wloc(:,1),whale{wn}.wloc(:,3)+h0(3),[],brushing.params.colorMat(wn+2, :),'filled') % ,'color',brushing.params.colorMat(wn+2, :),'linewidth',3)
-        hold on
+        % scatter3(whale{wn}.wloc(:,2),whale{wn}.wloc(:,1),whale{wn}.wloc(:,3)+h0(3),[],brushing.params.colorMat(wn+2, :),'filled') % ,'color',brushing.params.colorMat(wn+2, :),'linewidth',3)
+        % hold on
         plot3(whale{wn}.wlocSmooth(:,2),whale{wn}.wlocSmooth(:,1),whale{wn}.wloc(:,3)+h0(3),'color',colorVec{wn},'linewidth',3)
     end
 end
 box on
-view([60,10])
+view([115,10])
+
+figure
+scatter3(h1(1), h1(2), h1(3)+h0(3), 24, 'k^', 'filled')
+hold on
+scatter3(h2(1), h2(2), h2(3)+h0(3), 24, 'k^', 'filled')
+% scatter3(h3(1), h3(2), h3(3)+h0(3), 24, 'k','filled')
+for wn = 1:length(whale)
+    if isempty(whale{wn})
+        continue
+    else
+        scatter3(whale{wn}.wloc(:,2),whale{wn}.wloc(:,1),whale{wn}.wloc(:,3)+h0(3),[],brushing.params.colorMat(wn+2, :),'filled') % ,'color',brushing.params.colorMat(wn+2, :),'linewidth',3)
+        % hold on
+        % plot3(whale{wn}.wlocSmooth(:,2),whale{wn}.wlocSmooth(:,1),whale{wn}.wloc(:,3)+h0(3),'color',colorVec{wn},'linewidth',3)
+    end
+end
+box on
+view([115,10])
 

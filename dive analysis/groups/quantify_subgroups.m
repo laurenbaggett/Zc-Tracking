@@ -6,6 +6,8 @@ deps = {'SOCAL_W_01','SOCAL_W_02','SOCAL_W_03','SOCAL_W_04','SOCAL_W_05', ...
     'SOCAL_E_63','SOCAL_N_68',...
     'SOCAL_H_72','SOCAL_H_73','SOCAL_H_74','SOCAL_H_75'};
 
+% deps = {'SOCAL_W_03'};
+
 subgroups = [];
 spd = 60*60*24;
 
@@ -35,6 +37,9 @@ for j = 1:length(deps)
             whale(cellfun('isempty',whale)) = []; % remove any empty fields
 
             if numel(whale)>=2 % if there are at least two whales
+
+                start_times = [];
+                end_times = [];
 
                 for wn = 1:numel(whale) % get space and time together into one struct
                     start_times(wn) = whale{wn}.TDet(1);
@@ -81,12 +86,15 @@ for j = 1:length(deps)
                 % assign each whale to a cluster
                 cluster_assn = cluster(Z,'cutoff',distance_threshold,'criterion','distance');
 
-                % visualize this, if you want
-                figure(1)
-                dendrogram(Z)
+                % % % visualize this, if you want
+                % figure(1)
+                % dendrogram(Z)
 
                 total_whales = length(cluster_assn);
                 num_grps = length(unique(cluster_assn));
+                % if num_grps==2
+                %     keyboard
+                % end
                 mean_grps = mean(histcounts(cluster_assn));
                 subgroups = [subgroups;[total_whales,num_grps,mean_grps]];
 
@@ -132,7 +140,9 @@ figure
 scatter(subgroups(:,1),subgroups(:,2))
 
 [n,edges] = hist3(subgroups(:,1:2),{1:1:8 1:1:6});
-cmap = cmocean('dense');
+cmap = cmocean('tempo');
+% cmap = flipud(cmap);
+cmap = cmap(50:end,:);
 
 figure
 tiledlayout(1,2,'tilespacing','compact')
@@ -146,9 +156,11 @@ xlabel('Total # Whales per Encounter')
 ylabel('# of Subgroups')
 ylabel(c,'Counts')
 yticks([1:1:6])
+ylim([.5 6.5])
+xlim([1.5 8.5])
 % subplot(1,2,2)
 nexttile
-histogram(subgroups(:,3),[1:1:6],'facecolor',cmap(60,:))
+histogram(subgroups(:,3),[1:1:6],'facecolor',cmap(150,:))
 xticks([1:1:6])
 xlabel('Mean # Whales per Subgroup')
 ylabel('Frequency')
