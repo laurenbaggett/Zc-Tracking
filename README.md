@@ -1,4 +1,4 @@
-Welcome to the Zc-Tracking repository by laurenbaggett! This repository contains code related to Baggett et al., 2025.
+Welcome to the Zc-Tracking repository by @laurenbaggett! This repository contains code related to Baggett et al., 2025.
 
 Paper citation:
 Baggett, L.M., Snyder, E.R., Solsona-Berga, A. et al. Long-term monitoring of Ziphius cavirostris behavior using 3D tracking from fixed hydrophone arrays off Southern California. Sci Rep 15, 40859 (2025). https://doi.org/10.1038/s41598-025-24490-x
