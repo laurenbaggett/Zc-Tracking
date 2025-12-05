@@ -8,7 +8,7 @@ Goose-beaked whales (Ziphius cavirostris) are a deep-diving toothed whale specie
 
 Where'sWhaledo software: https://github.com/MarineBioAcousticsRC/Wheres-Whaledo
 
-For data, visit this (forthcoming) Dryad repository: https://doi.org/10.5061/dryad.280gb5n1r
+For data, visit this Dryad repository: https://doi.org/10.5061/dryad.280gb5n1r
 
 Questions? Email Lauren Baggett (lbaggett@ucsd.edu)
 
